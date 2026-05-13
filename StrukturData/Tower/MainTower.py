@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from LantaiTower import DoubleLinkedList
+from StrukturData.Tower.LantaiTower import DoubleLinkedList
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 json_path = ROOT_DIR / "data"

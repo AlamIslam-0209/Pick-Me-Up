@@ -1,4 +1,6 @@
-import Node as n
+import StrukturData.Tower.Node as n
+import time
+import random # Tambahan untuk logika musuh memilih target acak
 
 class CircularLinkedList:
     def __init__(self):
@@ -6,13 +8,13 @@ class CircularLinkedList:
         self.tail = None
         self.giliran_sekarang = None
         
-    def TambahEntity(self, entity):
-        giliran_berikutnya = n.Node(entity)
+    def TambahEntity(self, node_tree):
+        giliran_berikutnya = n.Node(node_tree)
         if not self.head:
             self.head = giliran_berikutnya
             self.tail = giliran_berikutnya
             self.head.next = self.head
-        else: #klo udah ada isinya
+        else: 
             self.tail.next = giliran_berikutnya
             self.tail = giliran_berikutnya
             self.tail.next = self.head    
@@ -27,68 +29,71 @@ class CircularLinkedList:
             return self.giliran_sekarang
         return None
     
-def siapkan_pasukan_ke_arena(node_tree, arena_cll):
-    """Menelusuri Tree dan memasukkan tiap karakter ke antrean bertarung (CLL)"""
+def siapkan_pasukan_ke_arena(node_tree, arena_cll, daftar_pasukan):
+    """Menelusuri Tree dan HANYA memasukkan Kapten & Anggota ke arena"""
     
-    arena_cll.TambahEntity(node_tree)
+    # Master tidak diizinkan masuk ke arena pertarungan
+    if node_tree.peran in ["Kapten", "Anggota"] and node_tree.entitas.is_alive:
+        arena_cll.TambahEntity(node_tree)
+        daftar_pasukan.append(node_tree) # Simpan ke list untuk jadi target monster
     
     for bawahan in node_tree.anak:
-        siapkan_pasukan_ke_arena(bawahan, arena_cll)
+        siapkan_pasukan_ke_arena(bawahan, arena_cll, daftar_pasukan)
         
         
 def jalankan_raid_kombat(master_tree, boss_node, arena_cll):
+    # 1. Masukkan Boss ke arena
     arena_cll.TambahEntity(boss_node)
     
-    # 2. Masukkan seluruh formasi Tree ke arena pakai fungsi rekursif tadi
-    siapkan_pasukan_ke_arena(master_tree, arena_cll)
+    # 2. Masukkan formasi Tree (Kecuali Master) ke arena
+    pasukan_hero = []
+    siapkan_pasukan_ke_arena(master_tree, arena_cll, pasukan_hero)
     
-    print("\n⚔️ RAID BOSS DIMULAI! ⚔️")
+    print("\n" + "="*45)
+    print(f"⚔️ RAID BOSS DIMULAI: Menghadapi {boss_node.entitas.nama}! ⚔️")
+    print("="*45)
     
-    # 3. Mulai muter gilirannya!
     giliran_aktif = arena_cll.Mulai()
+    turn = 1
     
-    # Contoh 3 Turn (Putaran) pertempuran
-    for turn in range(1, 4):
-        petarung = giliran_aktif.data
+    # 3. Game Loop Pertarungan (Berputar sampai Boss mati atau SEMUA HERO mati)
+    while boss_node.entitas.is_alive:
+        # Cek apakah masih ada hero yang hidup untuk ditarget
+        hero_hidup = [h for h in pasukan_hero if h.entitas.is_alive]
         
-        # Mengecek apakah ini Boss atau Pasukan kita
-        if petarung.nama == "BOSS NAGA":
-            print(f"[{turn}] 🐉 BOSS NAGA mengaum siap menyerang!")
-            # Logika boss nyerang random atau nyerang satu cabang (Party)
+        # Kalau semua hero sudah mati, pertarungan berakhir (Kalah)
+        if not hero_hidup:
+            break
             
+        # Ekstrak data dari Node
+        node_petarung = giliran_aktif.data
+        entitas_aktif = node_petarung.entitas
+        
+        # Jika petarung mati karena efek racun atau serangan sebelumnya, skip giliran
+        if not entitas_aktif.is_alive:
+            giliran_aktif = arena_cll.NextTurn()
+            continue
+            
+        print(f"\n[Turn {turn}] ⏳ Giliran: {entitas_aktif.nama} (HP: {entitas_aktif.hp}/{entitas_aktif.hp_max})")
+        time.sleep(1) 
+        
+        # LOGIKA SERANG
+        if node_petarung.peran == "Monster":
+            # Monster menyerang salah satu hero yang MASIH HIDUP secara acak
+            target_hero = random.choice(hero_hidup)
+            entitas_aktif.serang(target_hero.entitas)
         else:
-            # Mengecek jabatan lewat Tree
-            if petarung.peran == "Kapten":
-                print(f"[{turn}] 🗡️ {petarung.nama} (KAPTEN) memberikan aba-aba serangan!")
-                # Kasih buff ke anggota di bawahnya (petarung.anak)
-            elif petarung.peran == "Anggota":
-                print(f"[{turn}] 🏹 {petarung.nama} menyerang boss!")
-                
-        # Lanjut ke orang berikutnya di CLL
+            # Pahlawan menyerang Boss
+            entitas_aktif.serang(boss_node.entitas)
+            
+        turn += 1
         giliran_aktif = arena_cll.NextTurn()
     
-# if __name__ == "__main__":
-#     class DummyKarakter:
-#         def __init__(self, nama, tipe):
-#             self.nama = nama
-#             self.tipe = tipe
-
-#     arena = CircularLinkedList()
-    
-#     arena.TambahEntity(DummyKarakter("Han", "Hero"))
-#     arena.TambahEntity(DummyKarakter("Jenna", "Hero"))
-#     arena.TambahEntity(DummyKarakter("BOSS_01", "Monster"))
-    
-#     print("--- BATTLE START ---")
-#     giliran = arena.Mulai()
-#     print(f"Giliran 1: {giliran.data.nama} ({giliran.data.tipe})")
-    
-#     giliran = arena.NextTurn()
-#     print(f"Giliran 2: {giliran.data.nama} ({giliran.data.tipe})")
-    
-#     giliran = arena.NextTurn()
-#     print(f"Giliran 3: {giliran.data.nama} ({giliran.data.tipe})")
-    
-#     giliran = arena.NextTurn()
-#     print(f"Giliran 4: {giliran.data.nama} ({giliran.data.tipe}) ")
-
+    # HASIL PERTEMPURAN
+    print("\n" + "="*45)
+    if not boss_node.entitas.is_alive:
+        print("🎉 VICTORIOUS! Boss telah dihancurkan. Lantai diselesaikan!")
+        return True # Lantai bisa di-clear
+    else:
+        print("💀 DEFEAT! Seluruh party hancur, Master terpaksa mundur dari pertempuran...")
+        return False

@@ -1,8 +1,3 @@
-import sys
-from pathlib import Path
-
-
-
 import StrukturData.Tower.Node as n
 
 class Queue:
@@ -14,8 +9,8 @@ class Queue:
     def is_empty(self):
         return self.front is None
 
-    def enqueue(self, data_hero):
-        node_baru = n.Node(data_hero)
+    def enqueue(self, data):
+        node_baru = n.Node(data)
         
         if self.rear is None:
             self.front = self.rear = node_baru
@@ -28,9 +23,9 @@ class Queue:
 
     def dequeue(self):
         if self.is_empty():
-            return "Antrean gacha kosong!"
+            return "Antrean kosong!"
             
-        data_diklaim = self.front.data
+        pop = self.front.data
         
         self.front = self.front.next
         self._size -= 1
@@ -38,14 +33,23 @@ class Queue:
         if self.front is None:
             self.rear = None
             
-        return data_diklaim
+        return pop
 
     def front_item(self):
-        """Melihat hero yang akan diklaim selanjutnya"""
         if self.is_empty():
-            return "Antrean gacha kosong!"
+            return "Antrean kosong!"
         return self.front.data
 
     def size(self):
         return self._size
+    
+    def display(self):
+        if self.is_empty():
+            print("Antrean kosong!")
+            return
+        
+        current = self.front
+        while current:
+            print(current.data)
+            current = current.next
     

@@ -1,6 +1,6 @@
 ## fiturlantai dibuat dalam bentuk ldouble linked list agar bisa naik dan juga turun lantai dengan mudah, tanpa harus mengulang dari awal lagi 
 
-import Node as n
+import StrukturData.Tower.Node as n
 
 class DoubleLinkedList:
     def __init__(self):

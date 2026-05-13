@@ -15,7 +15,6 @@ class RaidNode:
     def tampilkan_struktur_raid(self, level=0):
         indentasi = "    " * level
         
-        # Menampilkan Nama dan HP dari objek entitas
         print(f"{indentasi} {self.entitas.nama} ({self.peran}) - HP: {self.entitas.hp}")
         
         for unit in self.anak:

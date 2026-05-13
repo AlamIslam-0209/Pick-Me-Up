@@ -28,23 +28,45 @@ class HashTable():
                     return pasangan[1]
 
         return None
+    
+    def cari_nama(self, nama_target):
+        nama_target = nama_target.lower()
+        
+        for slot in self.table:
+            if slot is not None:
+                for pasangan in slot:
+                    nama_hero = pasangan[1]['name'].lower()
+                    
+                    if nama_target in nama_hero:
+                        return pasangan[0], pasangan[1] 
+                        
+        return None, None # Kalau tidak ketemu
+    
+    def ambilsemua(self):
+        hasil = []
+        for slot in self.table:
+            if slot is not None:
+                for pasangan in slot:
+                    # pasangan[0] adalah id, pasangan[1] adalah data_dict
+                    hasil.append((pasangan[0], pasangan[1]))
+        return hasil
 
 
-import json
-from pathlib import Path
+# import json
+# from pathlib import Path
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
-json_path = ROOT_DIR / 'data' / 'heroBlueprints.json'
+# ROOT_DIR = Path(__file__).resolve().parent.parent
+# json_path = ROOT_DIR / 'data' / 'heroBlueprints.json'
 
-with open(json_path, 'r') as f:
-    hero_data = json.load(f)
+# with open(json_path, 'r') as f:
+#     hero_data = json.load(f)
 
-database_katalog = HashTable(100)
+# database_katalog = HashTable(100)
 
-for hero_id, hero_info in hero_data.items():
-    database_katalog.tambah(hero_id, hero_info)
+# for hero_id, hero_info in hero_data.items():
+#     database_katalog.tambah(hero_id, hero_info)
 
-hasil_pencarian = database_katalog.cari("H004")
+# hasil_pencarian = database_katalog.cari("H004")
 
-print(f"Data ditemukan: {hasil_pencarian['name']} (Bintang {hasil_pencarian['star_level']})")
+# print(f"Data ditemukan: {hasil_pencarian['name']} (Bintang {hasil_pencarian['star_level']})")
 
