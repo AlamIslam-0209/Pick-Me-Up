@@ -27,6 +27,46 @@ class CircularLinkedList:
             return self.giliran_sekarang
         return None
     
+def siapkan_pasukan_ke_arena(node_tree, arena_cll):
+    """Menelusuri Tree dan memasukkan tiap karakter ke antrean bertarung (CLL)"""
+    
+    arena_cll.TambahEntity(node_tree)
+    
+    for bawahan in node_tree.anak:
+        siapkan_pasukan_ke_arena(bawahan, arena_cll)
+        
+        
+def jalankan_raid_kombat(master_tree, boss_node, arena_cll):
+    arena_cll.TambahEntity(boss_node)
+    
+    # 2. Masukkan seluruh formasi Tree ke arena pakai fungsi rekursif tadi
+    siapkan_pasukan_ke_arena(master_tree, arena_cll)
+    
+    print("\n⚔️ RAID BOSS DIMULAI! ⚔️")
+    
+    # 3. Mulai muter gilirannya!
+    giliran_aktif = arena_cll.Mulai()
+    
+    # Contoh 3 Turn (Putaran) pertempuran
+    for turn in range(1, 4):
+        petarung = giliran_aktif.data
+        
+        # Mengecek apakah ini Boss atau Pasukan kita
+        if petarung.nama == "BOSS NAGA":
+            print(f"[{turn}] 🐉 BOSS NAGA mengaum siap menyerang!")
+            # Logika boss nyerang random atau nyerang satu cabang (Party)
+            
+        else:
+            # Mengecek jabatan lewat Tree
+            if petarung.peran == "Kapten":
+                print(f"[{turn}] 🗡️ {petarung.nama} (KAPTEN) memberikan aba-aba serangan!")
+                # Kasih buff ke anggota di bawahnya (petarung.anak)
+            elif petarung.peran == "Anggota":
+                print(f"[{turn}] 🏹 {petarung.nama} menyerang boss!")
+                
+        # Lanjut ke orang berikutnya di CLL
+        giliran_aktif = arena_cll.NextTurn()
+    
 # if __name__ == "__main__":
 #     class DummyKarakter:
 #         def __init__(self, nama, tipe):
