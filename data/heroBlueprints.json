@@ -19,7 +19,7 @@
     "hp": 200,
     "attack": 25,
     "equipment": {
-      "weapon": "Wooden Shield"
+      "weapon": "Wooden Spear"
     },
     "status_effects": {}
   },
@@ -86,7 +86,7 @@
   "H008": {
     "id": "H008",
     "name": "Roderick",
-    "star_level": 4,
+    "star_level": 3,
     "level": 1,
     "hp": 450,
     "attack": 60,
@@ -98,7 +98,7 @@
   "H009": {
     "id": "H009",
     "name": "Khaan",
-    "star_level": 5,
+    "star_level": 4,
     "level": 1,
     "hp": 550,
     "attack": 110,
@@ -122,7 +122,7 @@
   "H011": {
     "id": "H011",
     "name": "Vares",
-    "star_level": 3,
+    "star_level": 2,
     "level": 1,
     "hp": 260,
     "attack": 55,
