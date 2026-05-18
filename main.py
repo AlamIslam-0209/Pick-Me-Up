@@ -1,11 +1,17 @@
+# ██████╗ ██╗ ██████╗██╗  ██╗    ███╗   ███╗███████╗    ██╗   ██╗██████╗ 
+# ██╔══██╗██║██╔════╝██║ ██╔╝    ████╗ ████║██╔════╝    ██║   ██║██╔══██╗
+# ██████╔╝██║██║     █████╔╝     ██╔████╔██║█████╗      ██║   ██║██████╔╝
+# ██╔═══╝ ██║██║     ██╔═██╗     ██║╚██╔╝██║██╔══╝      ██║   ██║██╔═══╝ 
+# ██║     ██║╚██████╗██║  ██╗    ██║ ╚═╝ ██║███████╗    ╚██████╔╝██║     
+# ╚═╝     ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚══════╝     ╚═════╝ ╚═╝
 import json
 import random
-import time
 import sys
 import os
 from pathlib import Path
 
 from Entities.hero import Hero
+from Entities.enemy import Enemy 
 from Entities.entity import Entity
 from StrukturData.Tree import RaidNode
 from StrukturData.HashTable import HashTable
@@ -79,7 +85,6 @@ def proses_gacha(blueprint_db, id_antrian):
     return hero_baru
 
 def cek_kematian(daftar_party):
-    """Fungsi ini dipanggil SETELAH COMBAT untuk mengecek siapa yang gugur"""
     id_yang_mati = []
     
     for hero_id, hero_obj in barrack_aktif.items():
@@ -88,20 +93,23 @@ def cek_kematian(daftar_party):
             
     for hero_id in id_yang_mati:
         nama = barrack_aktif[hero_id].nama
-        print(f"🪦 MEMORIAL: {nama} telah dipindahkan ke Graveyard. Kematiannya tak akan dilupakan.")
-        # Masukkan ke set graveyard
+        print(f"MEMORIAL: {nama} telah dipindahkan ke Memory Hall. Kematiannya tak akan dilupakan ")
         graveyard.add(hero_id)
-        # Hapus dari dictionary barrack
         del barrack_aktif[hero_id]
         
-        # --- [TAMBAHAN FIX] ---
-        # Coret ID hero yang mati dari semua Party secara otomatis
-        for nama_p, anggota in daftar_party.items():
+        for anggota in daftar_party.values():
             if hero_id in anggota:
                 anggota.remove(hero_id)
+                
+# def cek_status(node_party):
+#     for anggota in node_party.anak:
+#         if anggota.entitas.is_alive and anggota.entitas.hp <= 0.2 * anggota.entitas.hp_max:
+#             print(anggota.entitas.nama, "sekarat")
+#         if anggota.peran in ["Master", "Kapten", "Anggota"]:
+#             cek_status(node_party)
+    
 
 def main():
-    # Inisialisasi 
     antrean_gacha = Queue()
     navigasi = Stack()
     muat_hero()
@@ -133,14 +141,14 @@ def main():
             pilihan = input("> Pilih aksi (0-3): ")
             
             if pilihan == "1":
-                navigasi.push("Summon Hall")  # Pindah menu = Push
+                navigasi.push("Summon Hall")  
             elif pilihan == "2":
                 navigasi.push("Barrack")
             elif pilihan == "3":
                 navigasi.push("Tower Gate")
             elif pilihan == "0":
                 print("Menyimpan progres... Sampai jumpa, Master!")
-                break # Keluar dari Game Loop (Game Over/Tutup)
+                break 
             else:
                 input("Pilihan tidak valid! (Tekan Enter untuk lanjut)")
 
@@ -156,13 +164,13 @@ def main():
             pilihan = input("> Pilih aksi (0-3): ")
             
             if pilihan == "1":
-                navigasi.push("Daftar Hero") # Pindah ke sub-menu yang lebih dalam
+                navigasi.push("Daftar Hero") 
             elif pilihan == "2":
                 navigasi.push("Cari Hero")
             elif pilihan == "3":
                 navigasi.push("Party")
             elif pilihan == "0":
-                navigasi.pop() # TOMBOL BACK = Pop menu Barrack, otomatis balik ke Lobi!
+                navigasi.pop() 
 
         # ==========================================
         # LOGIKA MENU: DAFTAR HERO (Sub-menu Barrack)
@@ -347,18 +355,13 @@ def main():
             lantai_tersedia = []
             current_node = menara_game.head
             
-            # Traversal (Menelusuri) Double Linked List dari lantai 1 sampai lantai_sekarang
             while current_node is not None:
                 data_l = current_node.data
                 
-                # Syarat bisa dimainkan: 
-                # 1. Itu adalah lantai tertinggi kita saat ini (Puncak)
-                # 2. ATAU itu lantai di bawahnya yang bukan boss (Farming)
                 is_puncak = (current_node == menara_game.lantai_sekarang)
                 if is_puncak or not data_l['is_boss']:
                     lantai_tersedia.append(current_node)
                 
-                # Berhenti kalau sudah sampai di lantai tertinggi yang dicapai pemain
                 if is_puncak:
                     break
                     
@@ -444,27 +447,32 @@ def main():
                         anggota_node = RaidNode(anggota_obj, "Anggota")
                         kapten_node.tambah_unit(anggota_node) 
                         
-                    # Kapten masuk ke bawah Master
                     master_node.tambah_unit(kapten_node)
 
                 print("\n[Formasi Terbentuk]")
                 master_node.tampilkan_struktur_raid()
                 
-                # E. Masuk Tower & Kombat
-                # (Boss/Monster Dummy sementara, karena JSON monster belum tersambung utuh)
-                boss_hp = 1000 if is_boss else 250
-                boss_atk = 150 if is_boss else 60
-                boss_entity = Entity(nama=data_pilihan['id_musuh'], hp=boss_hp, attack=boss_atk)
-                boss_node = RaidNode(boss_entity, "Monster")
+                master_musuh_entity = Entity("Pasukan Musuh", hp=999, attack=999)
+                master_musuh_node = RaidNode(master_musuh_entity, "Master Musuh")
+                
+                for m_id in data_pilihan['id_musuh']:
+                    cek_boss = "BOSS" in m_id 
+                    
+                    m_hp = 1000 if cek_boss else random.randint(105, 150)
+                    m_atk = 150 if cek_boss else random.randint(15, 30)
+                    
+                    m_entity = Enemy(nama=m_id, hp=m_hp, atk=m_atk, is_boss=cek_boss)
+                    m_node = RaidNode(m_entity, "Monster")
+                    
+                    master_musuh_node.tambah_unit(m_node)
                 
                 arena_cll = CircularLinkedList()
                 
-                # MULAI KOMBAT!
-                menang = jalankan_raid_kombat(master_node, boss_node, arena_cll)
+                menang = jalankan_raid_kombat(master_node, master_musuh_node, arena_cll)
                 
-                # F. Post-Combat Processing
                 print("\n--- MENGEVALUASI KONDISI PASUKAN ---")
                 cek_kematian(daftar_party)
+                # cek_status(master_node)
                 
                 if menang:
                     data_pilihan['is_cleared'] = True
@@ -490,12 +498,14 @@ def main():
                             print(f"\n[+] TOWER CLEARED! Kamu sudah mencapai puncak menara!")
                     else:
                         print(f"\n[+] berhasil menyelesaikan lantai {data_pilihan["no_lantai"]}")
+                        
                             
                 input("\nTekan Enter untuk kembali ke menu Tower...")
                 
             else:
                 input("\n[!] Pilihan tidak valid! (Tekan Enter)")
 
-# Menjalankan fungsi utama
+
+
 if __name__ == "__main__":
     main()

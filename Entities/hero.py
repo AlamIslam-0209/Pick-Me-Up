@@ -16,6 +16,9 @@ class Hero(Entity):
         self.exp = 0
         self.exp_next = self.level * 100 
         
+    def pesan_kematian(self):
+        print(f"{str(self.nama).capitalize()}[{'⭐' * self.star_level}] TELAH KEMBALI KE PELUKAN SANG DEWI! Semangat juangnya akan selalu dikenang selamanya")
+    
     def pulihkan_kondisi(self):
         if self.is_alive:
             self.hp = self.hp_max

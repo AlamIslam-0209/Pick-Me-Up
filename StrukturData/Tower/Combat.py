@@ -1,6 +1,6 @@
 import StrukturData.Tower.Node as n
 import time
-import random # Tambahan untuk logika musuh memilih target acak
+import random
 
 class CircularLinkedList:
     def __init__(self):
@@ -29,71 +29,59 @@ class CircularLinkedList:
             return self.giliran_sekarang
         return None
     
-def siapkan_pasukan_ke_arena(node_tree, arena_cll, daftar_pasukan):
-    """Menelusuri Tree dan HANYA memasukkan Kapten & Anggota ke arena"""
-    
-    # Master tidak diizinkan masuk ke arena pertarungan
-    if node_tree.peran in ["Kapten", "Anggota"] and node_tree.entitas.is_alive:
+def siapkan_entitas_ke_arena(node_tree, arena_cll, daftar_pasukan, peran_valid):
+    if node_tree.peran in peran_valid and node_tree.entitas.is_alive:
         arena_cll.TambahEntity(node_tree)
-        daftar_pasukan.append(node_tree) # Simpan ke list untuk jadi target monster
+        daftar_pasukan.append(node_tree) 
     
     for bawahan in node_tree.anak:
-        siapkan_pasukan_ke_arena(bawahan, arena_cll, daftar_pasukan)
+        siapkan_entitas_ke_arena(bawahan, arena_cll, daftar_pasukan, peran_valid)
         
         
-def jalankan_raid_kombat(master_tree, boss_node, arena_cll):
-    # 1. Masukkan Boss ke arena
-    arena_cll.TambahEntity(boss_node)
-    
-    # 2. Masukkan formasi Tree (Kecuali Master) ke arena
+def jalankan_raid_kombat(master_tree, master_musuh_tree, arena_cll):
     pasukan_hero = []
-    siapkan_pasukan_ke_arena(master_tree, arena_cll, pasukan_hero)
+    pasukan_musuh = []
+    
+    siapkan_entitas_ke_arena(master_tree, arena_cll, pasukan_hero, ["Kapten", "Anggota"])
+    siapkan_entitas_ke_arena(master_musuh_tree, arena_cll, pasukan_musuh, ["Monster"])
     
     print("\n" + "="*45)
-    print(f"⚔️ RAID BOSS DIMULAI: Menghadapi {boss_node.entitas.nama}! ⚔️")
+    print(f"⚔️ PERTEMPURAN DIMULAI: Menghadapi {len(pasukan_musuh)} Musuh! ⚔️")
     print("="*45)
     
     giliran_aktif = arena_cll.Mulai()
     turn = 1
     
-    # 3. Game Loop Pertarungan (Berputar sampai Boss mati atau SEMUA HERO mati)
-    while boss_node.entitas.is_alive:
-        # Cek apakah masih ada hero yang hidup untuk ditarget
+    while True:
         hero_hidup = [h for h in pasukan_hero if h.entitas.is_alive]
+        musuh_hidup = [m for m in pasukan_musuh if m.entitas.is_alive]
         
-        # Kalau semua hero sudah mati, pertarungan berakhir (Kalah)
         if not hero_hidup:
-            break
+            print("\n" + "="*45)
+            print("💀 DEFEAT! Seluruh party hancur, Master terpaksa mundur dari pertempuran...")
+            return False
             
-        # Ekstrak data dari Node
+        if not musuh_hidup:
+            print("\n" + "="*45)
+            print("🎉 VICTORIOUS! Seluruh musuh telah dihancurkan. Lantai diselesaikan!")
+            return True
+            
         node_petarung = giliran_aktif.data
         entitas_aktif = node_petarung.entitas
         
-        # Jika petarung mati karena efek racun atau serangan sebelumnya, skip giliran
         if not entitas_aktif.is_alive:
             giliran_aktif = arena_cll.NextTurn()
             continue
             
-        print(f"\n[Turn {turn}] ⏳ Giliran: {entitas_aktif.nama} (HP: {entitas_aktif.hp}/{entitas_aktif.hp_max})")
+        print(f"\n[Turn {turn}]  Giliran: {entitas_aktif.nama} (HP: {entitas_aktif.hp}/{entitas_aktif.hp_max})")
         time.sleep(1) 
         
-        # LOGIKA SERANG
         if node_petarung.peran == "Monster":
-            # Monster menyerang salah satu hero yang MASIH HIDUP secara acak
             target_hero = random.choice(hero_hidup)
             entitas_aktif.serang(target_hero.entitas)
         else:
-            # Pahlawan menyerang Boss
-            entitas_aktif.serang(boss_node.entitas)
+            target_musuh = random.choice(musuh_hidup)
+            entitas_aktif.serang(target_musuh.entitas)
             
         turn += 1
         giliran_aktif = arena_cll.NextTurn()
-    
-    # HASIL PERTEMPURAN
-    print("\n" + "="*45)
-    if not boss_node.entitas.is_alive:
-        print("🎉 VICTORIOUS! Boss telah dihancurkan. Lantai diselesaikan!")
-        return True # Lantai bisa di-clear
-    else:
-        print("💀 DEFEAT! Seluruh party hancur, Master terpaksa mundur dari pertempuran...")
-        return False
