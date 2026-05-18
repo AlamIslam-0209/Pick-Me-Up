@@ -47,7 +47,7 @@ def muat_hero():
     print(f"[Info] {len(hero_data)} Hero berhasil dimuat ke dalam Hash Table!")
         
     
-def proses_gacha(blueprint_db, id_antrian):
+def proses_gacha(id_antrian):
     
     pool_bintang = {1: [], 2: [], 3: [], 4: [], 5: []}
     
@@ -113,7 +113,6 @@ def main():
     antrean_gacha = Queue()
     navigasi = Stack()
     muat_hero()
-    blueprint_heroes = Daftar_Hero
     menara_game = siapkan_menara()
     daftar_party = {"Party 1": []}
     id_dalam_antrean = set()
@@ -303,7 +302,7 @@ def main():
             if pilihan == "1":
                 print("\n[+] Menarik 10 Hero ke dalam antrean...")
                 for i in range(10):
-                    hero_gacha = proses_gacha(blueprint_heroes, id_dalam_antrean)
+                    hero_gacha = proses_gacha(id_dalam_antrean)
                     
                     if hero_gacha:
                         antrean_gacha.enqueue(hero_gacha)

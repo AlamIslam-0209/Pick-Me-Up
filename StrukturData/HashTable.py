@@ -40,14 +40,13 @@ class HashTable():
                     if nama_target in nama_hero:
                         return pasangan[0], pasangan[1] 
                         
-        return None, None # Kalau tidak ketemu
+        return None, None 
     
     def ambilsemua(self):
         hasil = []
         for slot in self.table:
             if slot is not None:
                 for pasangan in slot:
-                    # pasangan[0] adalah id, pasangan[1] adalah data_dict
                     hasil.append((pasangan[0], pasangan[1]))
         return hasil
 
