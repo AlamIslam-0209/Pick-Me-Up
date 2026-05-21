@@ -147,9 +147,16 @@ def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_gam
                 if data_mentah:
                     hero_baru = Hero(data_mentah)
                     hero_baru.hp = h_data["hp"]
+                    hero_baru.hp_max = h_data.get("hp_max", hero_baru.hp_max)
+                    hero_baru.attack = h_data.get("attack", hero_baru.attack)
                     hero_baru.level = h_data["level"]
+                    hero_baru.star_level = h_data.get("star_level", hero_baru.star_level)
+                    hero_baru.max_level = hero_baru.star_level * 20
                     hero_baru.exp = h_data.get("exp", 0)
+                    hero_baru.exp_next = h_data.get("exp_next", hero_baru.level * 100)
                     hero_baru.is_alive = h_data["is_alive"]
+                    if "equipment" in h_data and "weapon" in h_data["equipment"]:
+                        hero_baru.weapon = h_data["equipment"]["weapon"]
                     barrack_aktif[h_id] = hero_baru
                     
         if "menara" in saved_data:
@@ -329,6 +336,11 @@ def main():
                         
                         if id_ditemukan is None:
                             print(f"[!] Gagal: Hero dengan nama '{nama_target}' tidak ada di Barrack!")
+                            valid = False
+                            break
+                            
+                        if id_ditemukan in id_dimasukkan:
+                            print(f"[!] Gagal: {barrack_aktif[id_ditemukan].nama} sudah terdaftar di party ini!")
                             valid = False
                             break
                             
