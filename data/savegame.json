@@ -1,94 +1,109 @@
 {
     "barrack_aktif": {
-        "H023": {
-            "id": "H023",
-            "name": "Sion",
-            "hp": 108,
-            "hp_max": 108,
-            "attack": 12,
-            "level": 1,
+        "H072": {
+            "id": "H072",
+            "name": "Julia",
+            "hp": 256,
+            "hp_max": 256,
+            "attack": 76,
+            "level": 5,
+            "star_level": 3,
+            "equipment": {
+                "weapon": "Heavy Crossbow"
+            },
+            "is_alive": true,
+            "exp": 350,
+            "exp_next": 500
+        },
+        "H034": {
+            "id": "H034",
+            "name": "Dano",
+            "hp": 148,
+            "hp_max": 148,
+            "attack": 31,
+            "level": 5,
             "star_level": 1,
             "equipment": {
-                "weapon": "Recurve Bow"
+                "weapon": "Broadsword"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
-        },
-        "H049": {
-            "id": "H049",
-            "name": "Tino",
-            "hp": 119,
-            "hp_max": 119,
-            "attack": 15,
-            "level": 1,
-            "star_level": 2,
-            "equipment": {
-                "weapon": "Silver Dagger"
-            },
-            "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 320,
+            "exp_next": 500
         },
         "H037": {
             "id": "H037",
             "name": "Gino",
-            "hp": 109,
-            "hp_max": 109,
-            "attack": 11,
-            "level": 1,
+            "hp": 149,
+            "hp_max": 149,
+            "attack": 31,
+            "level": 5,
             "star_level": 1,
             "equipment": {
                 "weapon": "Heavy Crossbow"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 170,
+            "exp_next": 500
         },
-        "H019": {
-            "id": "H019",
-            "name": "Orion",
-            "hp": 107,
-            "hp_max": 107,
-            "attack": 12,
-            "level": 1,
+        "H008": {
+            "id": "H008",
+            "name": "Doyun",
+            "hp": 159,
+            "hp_max": 159,
+            "attack": 37,
+            "level": 6,
             "star_level": 1,
             "equipment": {
-                "weapon": "Crossbow"
+                "weapon": "Throwing Knives"
             },
             "is_alive": true,
             "exp": 0,
-            "exp_next": 100
+            "exp_next": 600
         },
-        "H095": {
-            "id": "H095",
-            "name": "Nox",
-            "hp": 145,
-            "hp_max": 145,
-            "attack": 21,
-            "level": 1,
-            "star_level": 4,
+        "H057": {
+            "id": "H057",
+            "name": "Asher",
+            "hp": 207,
+            "hp_max": 207,
+            "attack": 52,
+            "level": 5,
+            "star_level": 2,
             "equipment": {
-                "weapon": "Void Daggers"
+                "weapon": "Sniper Bow"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 350,
+            "exp_next": 500
         },
-        "H030": {
-            "id": "H030",
-            "name": "Zian",
-            "hp": 107,
-            "hp_max": 107,
-            "attack": 10,
-            "level": 1,
+        "H005": {
+            "id": "H005",
+            "name": "Alya",
+            "hp": 110,
+            "hp_max": 110,
+            "attack": 17,
+            "level": 2,
             "star_level": 1,
             "equipment": {
-                "weapon": "Steel Dagger"
+                "weapon": "Dagger"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 170,
+            "exp_next": 200
+        },
+        "H016": {
+            "id": "H016",
+            "name": "Lira",
+            "hp": 112,
+            "hp_max": 112,
+            "attack": 17,
+            "level": 2,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Spellbook"
+            },
+            "is_alive": true,
+            "exp": 170,
+            "exp_next": 200
         },
         "H038": {
             "id": "H038",
@@ -105,63 +120,148 @@
             "exp": 0,
             "exp_next": 100
         },
-        "H050": {
-            "id": "H050",
-            "name": "Uno",
-            "hp": 121,
-            "hp_max": 121,
-            "attack": 14,
-            "level": 1,
-            "star_level": 2,
-            "equipment": {
-                "weapon": "Steel Mace"
-            },
-            "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
-        },
-        "H074": {
-            "id": "H074",
-            "name": "Lana",
-            "hp": 135,
-            "hp_max": 135,
-            "attack": 17,
-            "level": 1,
-            "star_level": 3,
-            "equipment": {
-                "weapon": "Steel Spear"
-            },
-            "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
-        },
-        "H010": {
-            "id": "H010",
-            "name": "Fira",
-            "hp": 101,
-            "hp_max": 101,
-            "attack": 10,
+        "H041": {
+            "id": "H041",
+            "name": "Keno",
+            "hp": 105,
+            "hp_max": 105,
+            "attack": 11,
             "level": 1,
             "star_level": 1,
             "equipment": {
-                "weapon": "Old Staff"
+                "weapon": "Buckler"
             },
             "is_alive": true,
             "exp": 0,
             "exp_next": 100
+        },
+        "H069": {
+            "id": "H069",
+            "name": "Gina",
+            "hp": 193,
+            "hp_max": 193,
+            "attack": 47,
+            "level": 3,
+            "star_level": 3,
+            "equipment": {
+                "weapon": "Steel Halberd"
+            },
+            "is_alive": true,
+            "exp": 150,
+            "exp_next": 300
+        },
+        "H009": {
+            "id": "H009",
+            "name": "Ewan",
+            "hp": 107,
+            "hp_max": 107,
+            "attack": 11,
+            "level": 1,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Militia Spear"
+            },
+            "is_alive": true,
+            "exp": 0,
+            "exp_next": 100
+        },
+        "H003": {
+            "id": "H003",
+            "name": "Jenna",
+            "hp": 112,
+            "hp_max": 112,
+            "attack": 16,
+            "level": 2,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Trainee Bow"
+            },
+            "is_alive": true,
+            "exp": 170,
+            "exp_next": 200
+        },
+        "H031": {
+            "id": "H031",
+            "name": "Aldo",
+            "hp": 105,
+            "hp_max": 105,
+            "attack": 11,
+            "level": 1,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Tower Shield"
+            },
+            "is_alive": true,
+            "exp": 0,
+            "exp_next": 100
+        },
+        "H025": {
+            "id": "H025",
+            "name": "Urien",
+            "hp": 100,
+            "hp_max": 100,
+            "attack": 11,
+            "level": 1,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Warhammer"
+            },
+            "is_alive": true,
+            "exp": 0,
+            "exp_next": 100
+        },
+        "H065": {
+            "id": "H065",
+            "name": "Clara",
+            "hp": 168,
+            "hp_max": 168,
+            "attack": 33,
+            "level": 3,
+            "star_level": 2,
+            "equipment": {
+                "weapon": "Iron Mace"
+            },
+            "is_alive": true,
+            "exp": 150,
+            "exp_next": 300
         }
     },
-    "graveyard": [],
+    "graveyard": [
+        "H062",
+        "H030",
+        "H032",
+        "H006",
+        "H028"
+    ],
     "daftar_party": {
         "Party 1": [
-            "H095",
-            "H074",
-            "H049",
-            "H050",
-            "H010"
+            "H072",
+            "H057",
+            "H069",
+            "H065",
+            "H008"
+        ],
+        "Party 2": [
+            "H034",
+            "H037",
+            "H005",
+            "H016",
+            "H003"
         ]
     },
     "menara": {
-        "current_floor": 1
+        "current_floor": 10
+    },
+    "inventory": {
+        "tiket_gacha": 0,
+        "kristal": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0
+        }
     }
 }

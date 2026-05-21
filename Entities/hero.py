@@ -61,8 +61,8 @@ class Hero(Entity):
 
     def evolusi(self):
         """Menaikkan bintang hero jika sudah mencapai max level"""
-        if self.star_level >= 5:
-            print(f"[!] {self.nama} sudah mencapai batas kelangkaan tertinggi (5⭐)!")
+        if self.star_level >= 7:
+            print(f"[!] {self.nama} sudah mencapai batas kelangkaan tertinggi (7⭐)!")
             return False
             
         if self.level < self.max_level:
