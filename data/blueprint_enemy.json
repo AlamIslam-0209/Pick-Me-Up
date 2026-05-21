@@ -1,0 +1,506 @@
+[
+    {
+        "id": "M01",
+        "name": "Slime Rumput",
+        "hp": 45,
+        "atk": 13,
+        "is_boss": false
+    },
+    {
+        "id": "M02",
+        "name": "Serigala",
+        "hp": 55,
+        "atk": 16,
+        "is_boss": false
+    },
+    {
+        "id": "M03",
+        "name": "Goblin",
+        "hp": 65,
+        "atk": 19,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_01",
+        "name": "Raja Slime Raksasa",
+        "hp": 500,
+        "atk": 150,
+        "is_boss": true
+    },
+    {
+        "id": "M04",
+        "name": "Kelelawar",
+        "hp": 130,
+        "atk": 18,
+        "is_boss": false
+    },
+    {
+        "id": "M05",
+        "name": "Slime Racun",
+        "hp": 154,
+        "atk": 22,
+        "is_boss": false
+    },
+    {
+        "id": "M06",
+        "name": "Laba-laba",
+        "hp": 107,
+        "atk": 15,
+        "is_boss": false
+    },
+    {
+        "id": "M07",
+        "name": "Kadal Gua",
+        "hp": 130,
+        "atk": 18,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_02",
+        "name": "Ratu Laba-laba Gua",
+        "hp": 914,
+        "atk": 159,
+        "is_boss": true
+    },
+    {
+        "id": "M08",
+        "name": "Harpy",
+        "hp": 293,
+        "atk": 22,
+        "is_boss": false
+    },
+    {
+        "id": "M09",
+        "name": "Serigala Angin",
+        "hp": 358,
+        "atk": 27,
+        "is_boss": false
+    },
+    {
+        "id": "M10",
+        "name": "Goblin Pengintai",
+        "hp": 423,
+        "atk": 32,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_03",
+        "name": "Raja Harpy Badai",
+        "hp": 2156,
+        "atk": 187,
+        "is_boss": true
+    },
+    {
+        "id": "M11",
+        "name": "Golem Batu",
+        "hp": 739,
+        "atk": 42,
+        "is_boss": false
+    },
+    {
+        "id": "M12",
+        "name": "Tengkorak",
+        "hp": 873,
+        "atk": 50,
+        "is_boss": false
+    },
+    {
+        "id": "M13",
+        "name": "Hantu Reruntuhan",
+        "hp": 604,
+        "atk": 35,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_04",
+        "name": "Jenderal Golem Kuno",
+        "hp": 4227,
+        "atk": 233,
+        "is_boss": true
+    },
+    {
+        "id": "M14",
+        "name": "Ksatria Hantu",
+        "hp": 1501,
+        "atk": 75,
+        "is_boss": false
+    },
+    {
+        "id": "M15",
+        "name": "Gargoyle",
+        "hp": 1039,
+        "atk": 52,
+        "is_boss": false
+    },
+    {
+        "id": "M16",
+        "name": "Banshee",
+        "hp": 1270,
+        "atk": 63,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_05",
+        "name": "Arch-Knight Kematian",
+        "hp": 7126,
+        "atk": 298,
+        "is_boss": true
+    },
+    {
+        "id": "M17",
+        "name": "Kalajengking Raksasa",
+        "hp": 1599,
+        "atk": 74,
+        "is_boss": false
+    },
+    {
+        "id": "M18",
+        "name": "Mummy",
+        "hp": 1954,
+        "atk": 91,
+        "is_boss": false
+    },
+    {
+        "id": "M19",
+        "name": "Cacing Pasir",
+        "hp": 2310,
+        "atk": 107,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_06",
+        "name": "Firaun Terkutuk",
+        "hp": 10853,
+        "atk": 381,
+        "is_boss": true
+    },
+    {
+        "id": "M20",
+        "name": "Kadal Air",
+        "hp": 2791,
+        "atk": 124,
+        "is_boss": false
+    },
+    {
+        "id": "M21",
+        "name": "Peri Penipu",
+        "hp": 3299,
+        "atk": 146,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_07",
+        "name": "Lord Kadal Air",
+        "hp": 15408,
+        "atk": 484,
+        "is_boss": true
+    },
+    {
+        "id": "M22",
+        "name": "Bunga Beracun",
+        "hp": 3779,
+        "atk": 162,
+        "is_boss": false
+    },
+    {
+        "id": "M23",
+        "name": "Ular Kobra",
+        "hp": 4466,
+        "atk": 192,
+        "is_boss": false
+    },
+    {
+        "id": "M24",
+        "name": "Slime Miasma",
+        "hp": 3092,
+        "atk": 133,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_08",
+        "name": "Matriark Bunga Beracun",
+        "hp": 20792,
+        "atk": 604,
+        "is_boss": true
+    },
+    {
+        "id": "M25",
+        "name": "Treant",
+        "hp": 5814,
+        "atk": 245,
+        "is_boss": false
+    },
+    {
+        "id": "M26",
+        "name": "Roh Hutan",
+        "hp": 4025,
+        "atk": 170,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_09",
+        "name": "Treant Purba",
+        "hp": 27004,
+        "atk": 743,
+        "is_boss": true
+    },
+    {
+        "id": "M27",
+        "name": "Yeti",
+        "hp": 7342,
+        "atk": 306,
+        "is_boss": false
+    },
+    {
+        "id": "M28",
+        "name": "Slime Es",
+        "hp": 5083,
+        "atk": 212,
+        "is_boss": false
+    },
+    {
+        "id": "M29",
+        "name": "Serigala Es",
+        "hp": 6212,
+        "atk": 259,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_10",
+        "name": "Alpha Yeti",
+        "hp": 34044,
+        "atk": 901,
+        "is_boss": true
+    },
+    {
+        "id": "M30",
+        "name": "Ksatria Beku",
+        "hp": 6264,
+        "atk": 258,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_11",
+        "name": "Raja Ksatria Beku",
+        "hp": 41912,
+        "atk": 1077,
+        "is_boss": true
+    },
+    {
+        "id": "M31",
+        "name": "Naga Air Kecil",
+        "hp": 10935,
+        "atk": 448,
+        "is_boss": false
+    },
+    {
+        "id": "M32",
+        "name": "Slime Kaca",
+        "hp": 7570,
+        "atk": 310,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_12",
+        "name": "Naga Air Dewasa",
+        "hp": 50609,
+        "atk": 1272,
+        "is_boss": true
+    },
+    {
+        "id": "M33",
+        "name": "Golem Api",
+        "hp": 13002,
+        "atk": 529,
+        "is_boss": false
+    },
+    {
+        "id": "M34",
+        "name": "Kelelawar Api",
+        "hp": 9001,
+        "atk": 366,
+        "is_boss": false
+    },
+    {
+        "id": "M35",
+        "name": "Elemental Api",
+        "hp": 11002,
+        "atk": 447,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_13",
+        "name": "Raja Golem Magma",
+        "hp": 60134,
+        "atk": 1486,
+        "is_boss": true
+    },
+    {
+        "id": "M36",
+        "name": "Salamander Api",
+        "hp": 10557,
+        "atk": 428,
+        "is_boss": false
+    },
+    {
+        "id": "M37",
+        "name": "Iblis Lahar",
+        "hp": 12903,
+        "atk": 523,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_14",
+        "name": "Lord Iblis Lahar",
+        "hp": 70487,
+        "atk": 1718,
+        "is_boss": true
+    },
+    {
+        "id": "M38",
+        "name": "Golem Kristal",
+        "hp": 12236,
+        "atk": 494,
+        "is_boss": false
+    },
+    {
+        "id": "M39",
+        "name": "Laba-laba Kristal",
+        "hp": 14955,
+        "atk": 603,
+        "is_boss": false
+    },
+    {
+        "id": "M40",
+        "name": "Kelelawar Kristal",
+        "hp": 17674,
+        "atk": 713,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_15",
+        "name": "Ratu Laba-laba Kristal",
+        "hp": 81668,
+        "atk": 1968,
+        "is_boss": true
+    },
+    {
+        "id": "M41",
+        "name": "Harpy Elit",
+        "hp": 17160,
+        "atk": 690,
+        "is_boss": false
+    },
+    {
+        "id": "M42",
+        "name": "Griffin",
+        "hp": 20280,
+        "atk": 816,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_16",
+        "name": "Raja Griffin Langit",
+        "hp": 93678,
+        "atk": 2237,
+        "is_boss": true
+    },
+    {
+        "id": "M43",
+        "name": "Elemental Angin",
+        "hp": 19517,
+        "atk": 784,
+        "is_boss": false
+    },
+    {
+        "id": "M44",
+        "name": "Naga Angin",
+        "hp": 23065,
+        "atk": 926,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_17",
+        "name": "Arch-Dragon Angin",
+        "hp": 106516,
+        "atk": 2525,
+        "is_boss": true
+    },
+    {
+        "id": "M45",
+        "name": "Iblis Bayangan",
+        "hp": 22025,
+        "atk": 883,
+        "is_boss": false
+    },
+    {
+        "id": "M46",
+        "name": "Reaper",
+        "hp": 26029,
+        "atk": 1043,
+        "is_boss": false
+    },
+    {
+        "id": "M47",
+        "name": "Gargoyle Hitam",
+        "hp": 18020,
+        "atk": 722,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_18",
+        "name": "The Grim Reaper",
+        "hp": 120182,
+        "atk": 2831,
+        "is_boss": true
+    },
+    {
+        "id": "M48",
+        "name": "Elemental Cahaya",
+        "hp": 29174,
+        "atk": 1168,
+        "is_boss": false
+    },
+    {
+        "id": "M49",
+        "name": "Golem Bintang",
+        "hp": 20197,
+        "atk": 809,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_19",
+        "name": "Lord Golem Bintang",
+        "hp": 134677,
+        "atk": 3156,
+        "is_boss": true
+    },
+    {
+        "id": "M50",
+        "name": "Valkyrie",
+        "hp": 32500,
+        "atk": 1300,
+        "is_boss": false
+    },
+    {
+        "id": "M51",
+        "name": "Malaikat Jatuh",
+        "hp": 22500,
+        "atk": 900,
+        "is_boss": false
+    },
+    {
+        "id": "M52",
+        "name": "Penjaga Gerbang Langit",
+        "hp": 27500,
+        "atk": 1100,
+        "is_boss": false
+    },
+    {
+        "id": "BOSS_20",
+        "name": "Archangel of Ruin",
+        "hp": 150000,
+        "atk": 3500,
+        "is_boss": true
+    }
+]

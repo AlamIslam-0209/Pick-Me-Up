@@ -19,6 +19,7 @@ def main():
     antrean_gacha = Queue()
     navigasi = Stack()
     muat_hero()
+    muat_musuh()
     menara_game = siapkan_menara()
     daftar_party = {"Party 1": []}
     id_dalam_antrean = set()
@@ -493,10 +494,17 @@ def main():
                 for m_id in data_pilihan['id_musuh']:
                     cek_boss = "BOSS" in m_id 
                     
-                    m_hp = 1000 if cek_boss else random.randint(20, 50)
-                    m_atk = 150 if cek_boss else random.randint(15, 30)
+                    if m_id in Daftar_Musuh:
+                        blueprint = Daftar_Musuh[m_id]
+                        m_nama = blueprint["name"]
+                        m_hp = blueprint["hp"]
+                        m_atk = blueprint["atk"]
+                    else:
+                        m_nama = m_id
+                        m_hp = 500 if cek_boss else random.randint(20, 50)
+                        m_atk = 150 if cek_boss else random.randint(15, 30)
                     
-                    m_entity = Enemy(nama=m_id, hp=m_hp, atk=m_atk, is_boss=cek_boss)
+                    m_entity = Enemy(nama=m_nama, hp=m_hp, atk=m_atk, is_boss=cek_boss)
                     m_node = RaidNode(m_entity, "Monster")
                     
                     master_musuh_node.tambah_unit(m_node)

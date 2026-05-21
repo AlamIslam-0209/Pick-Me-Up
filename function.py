@@ -20,6 +20,7 @@ from Algoritma import save_load
 barrack_aktif = {} 
 graveyard = set()
 Daftar_Hero = HashTable(400)
+Daftar_Musuh = {}
 n = 1
 
 NAMA_KRISTAL = {1: "Merah", 2: "Jingga", 3: "Kuning", 4: "Hijau", 5: "Biru", 6: "Nila", 7: "Ungu"}
@@ -43,6 +44,16 @@ def muat_hero():
         Daftar_Hero.tambah(hero_id, hero_info)
         
     print(f"[Info] {len(hero_data)} Hero berhasil dimuat ke dalam Hash Table!")
+    
+def muat_musuh():
+    try:
+        with open(json_path / "blueprint_enemy.json", "r") as file:
+            enemy_data = json.load(file)
+            for enemy in enemy_data:
+                Daftar_Musuh[enemy["id"]] = enemy
+        print(f"[Info] {len(Daftar_Musuh)} Musuh & Boss berhasil dimuat!")
+    except FileNotFoundError:
+        print("[Error] blueprint_enemy.json tidak ditemukan!")
         
 def proses_gacha(id_antrian):
     pool_bintang = {1: [], 2: [], 3: [], 4: [], 5: []}
@@ -183,4 +194,4 @@ def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_gam
     else:
         print("[Info] Tidak ada save data. Memulai game baru...")
         inventory["tiket_gacha"] = 1
-        inventory["kristal"] = {1: 1000, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
+        inventory["kristal"] = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}
