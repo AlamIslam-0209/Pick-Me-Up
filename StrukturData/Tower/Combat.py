@@ -46,7 +46,7 @@ def jalankan_raid_kombat(master_tree, master_musuh_tree, arena_cll):
     siapkan_entitas_ke_arena(master_musuh_tree, arena_cll, pasukan_musuh, ["Monster"])
     
     print("\n" + "="*45)
-    print(f"⚔️ PERTEMPURAN DIMULAI: Menghadapi {len(pasukan_musuh)} Musuh! ⚔️")
+    print(f"⚔️ PERTEMPURAN DIMULAI: Menghadapi {len(pasukan_musuh)} Musuh! ")
     print("="*45)
     
     giliran_aktif = arena_cll.Mulai()
@@ -58,12 +58,12 @@ def jalankan_raid_kombat(master_tree, master_musuh_tree, arena_cll):
         
         if not hero_hidup:
             print("\n" + "="*45)
-            print("💀 DEFEAT! Seluruh party hancur, Master terpaksa mundur dari pertempuran...")
+            print(" DEFEAT! Seluruh party hancur, Master terpaksa mundur dari pertempuran...")
             return False
             
         if not musuh_hidup:
             print("\n" + "="*45)
-            print("🎉 VICTORIOUS! Seluruh musuh telah dihancurkan. Lantai diselesaikan!")
+            print(" VICTORIOUS! Seluruh musuh telah dihancurkan. Lantai diselesaikan!")
             return True
             
         node_petarung = giliran_aktif.data

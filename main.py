@@ -20,11 +20,10 @@ from StrukturData.Tower.MainTower import siapkan_menara
 
 ROOT_DIR = Path(__file__).resolve().parent
 json_path = ROOT_DIR / "data"
-
-ROOT_DIR = Path(__file__).resolve().parent
 sys.path.append(str(ROOT_DIR))
 
 
+from Algoritma import save_load
 from StrukturData.Stack import Stack
 from StrukturData.Queue import Queue 
 import random
@@ -47,7 +46,7 @@ def muat_hero():
     print(f"[Info] {len(hero_data)} Hero berhasil dimuat ke dalam Hash Table!")
         
     
-def proses_gacha(blueprint_db, id_antrian):
+def proses_gacha(id_antrian):
     
     pool_bintang = {1: [], 2: [], 3: [], 4: [], 5: []}
     
@@ -107,17 +106,79 @@ def cek_kematian(daftar_party):
 #             print(anggota.entitas.nama, "sekarat")
 #         if anggota.peran in ["Master", "Kapten", "Anggota"]:
 #             cek_status(node_party)
+
+def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game):
+    save_path = json_path / "savegame.json"
+    save_data = {}
+    save_data["barrack_aktif"] = {}
+    for h_id, hero_obj in barrack_aktif.items():
+        save_data["barrack_aktif"][h_id] = {
+            "id": hero_obj.id,
+            "name": hero_obj.nama,
+            "hp": hero_obj.hp,
+            "hp_max": hero_obj.hp_max,
+            "attack": hero_obj.attack,
+            "level": hero_obj.level,
+            "star_level": hero_obj.star_level,
+            "equipment": {"weapon": getattr(hero_obj, "weapon", None)},
+            "is_alive": hero_obj.is_alive,
+            "exp": getattr(hero_obj, "exp", 0),
+            "exp_next": getattr(hero_obj, "exp_next", hero_obj.level*100)
+        }
+    save_data["graveyard"] = list(graveyard)
+    save_data["daftar_party"] = daftar_party
+    save_data["menara"] = {"current_floor": menara_game.lantai_sekarang.data.get("no_lantai")}
+    save_load.save_game(save_path, save_data)
+    
+def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_game):
+    if saved_data:
+        print("[Info] Save data ditemukan! Memuat progress sebelumnya...")
+        
+        if "graveyard" in saved_data:
+            graveyard.update(saved_data["graveyard"])
+            
+        if "daftar_party" in saved_data:
+            daftar_party.clear()
+            daftar_party.update(saved_data["daftar_party"])
+            
+        if "barrack_aktif" in saved_data:
+            for h_id, h_data in saved_data["barrack_aktif"].items():
+                data_mentah = Daftar_Hero.cari(h_data["id"])
+                if data_mentah:
+                    hero_baru = Hero(data_mentah)
+                    hero_baru.hp = h_data["hp"]
+                    hero_baru.hp_max = h_data.get("hp_max", hero_baru.hp_max)
+                    hero_baru.attack = h_data.get("attack", hero_baru.attack)
+                    hero_baru.level = h_data["level"]
+                    hero_baru.star_level = h_data.get("star_level", hero_baru.star_level)
+                    hero_baru.max_level = hero_baru.star_level * 20
+                    hero_baru.exp = h_data.get("exp", 0)
+                    hero_baru.exp_next = h_data.get("exp_next", hero_baru.level * 100)
+                    hero_baru.is_alive = h_data["is_alive"]
+                    if "equipment" in h_data and "weapon" in h_data["equipment"]:
+                        hero_baru.weapon = h_data["equipment"]["weapon"]
+                    barrack_aktif[h_id] = hero_baru
+                    
+        if "menara" in saved_data:
+            target_lantai = saved_data["menara"].get("current_floor", 1)
+            current_node = menara_game.head
+            while current_node:
+                if current_node.data["no_lantai"] == target_lantai:
+                    menara_game.lantai_sekarang = current_node
+                    break
+                current_node = current_node.next
+    else:
+        print("[Info] Tidak ada save data. Memulai game baru...")
     
 
 def main():
     antrean_gacha = Queue()
     navigasi = Stack()
     muat_hero()
-    blueprint_heroes = Daftar_Hero
     menara_game = siapkan_menara()
     daftar_party = {"Party 1": []}
     id_dalam_antrean = set()
-    
+    cek_save_load(save_load.load_game(json_path / "savegame.json"), graveyard, daftar_party, barrack_aktif, menara_game)
     navigasi.push("Lobi Utama")
     
     while True:
@@ -148,6 +209,27 @@ def main():
                 navigasi.push("Tower Gate")
             elif pilihan == "0":
                 print("Menyimpan progres... Sampai jumpa, Master!")
+                # Siapkan data save
+                save_data = {}
+                save_data["barrack_aktif"] = {}
+                for h_id, hero_obj in barrack_aktif.items():
+                    save_data["barrack_aktif"][h_id] = {
+                        "id": hero_obj.id,
+                        "name": hero_obj.nama,
+                        "hp": hero_obj.hp,
+                        "hp_max": hero_obj.hp_max,
+                        "attack": hero_obj.attack,
+                        "level": hero_obj.level,
+                        "star_level": hero_obj.star_level,
+                        "equipment": {"weapon": getattr(hero_obj, "weapon", None)},
+                        "is_alive": hero_obj.is_alive,
+                        "exp": getattr(hero_obj, "exp", 0),
+                        "exp_next": getattr(hero_obj, "exp_next", hero_obj.level*100)
+                    }
+                save_data["graveyard"] = list(graveyard)
+                save_data["daftar_party"] = daftar_party
+                save_data["menara"] = {"current_floor": menara_game.lantai_sekarang.data.get("no_lantai")}
+                save_load.save_game(json_path / "savegame.json", save_data)
                 break 
             else:
                 input("Pilihan tidak valid! (Tekan Enter untuk lanjut)")
@@ -257,6 +339,11 @@ def main():
                             valid = False
                             break
                             
+                        if id_ditemukan in id_dimasukkan:
+                            print(f"[!] Gagal: {barrack_aktif[id_ditemukan].nama} sudah terdaftar di party ini!")
+                            valid = False
+                            break
+                            
                         for nama_p, anggota_p in daftar_party.items():
                             if nama_p != target_party and id_ditemukan in anggota_p:
                                 print(f"[!] Gagal: {barrack_aktif[id_ditemukan].nama} sedang bertugas di {nama_p}!")
@@ -303,7 +390,7 @@ def main():
             if pilihan == "1":
                 print("\n[+] Menarik 10 Hero ke dalam antrean...")
                 for i in range(10):
-                    hero_gacha = proses_gacha(blueprint_heroes, id_dalam_antrean)
+                    hero_gacha = proses_gacha(id_dalam_antrean)
                     
                     if hero_gacha:
                         antrean_gacha.enqueue(hero_gacha)

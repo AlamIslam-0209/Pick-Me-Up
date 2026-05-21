@@ -47,7 +47,7 @@ class SistemMenu:
             print(f"\n[-] Menutup layar {menu_sebelumnya}...")
             print(f"[*] Kembali ke: {self.riwayat_menu.peek()}")
         else:
-            print("\n[!] Kamu sudah berada di Lobi Utama, tidak bisa kembali lagi. Tekan 0 untuk keluar game.")
+            print("\n[!] Kamu sudah berada di Lobi Utama, tidak bisa kembali lagi. Tekan 0git  untuk keluar game.")
 
     def menu_sekarang(self):
         return self.riwayat_menu.peek()
