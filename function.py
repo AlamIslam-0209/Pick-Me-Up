@@ -22,6 +22,16 @@ graveyard = set()
 Daftar_Hero = HashTable(400)
 n = 1
 
+NAMA_KRISTAL = {1: "Merah", 2: "Jingga", 3: "Kuning", 4: "Hijau", 5: "Biru", 6: "Nila", 7: "Ungu"}
+
+def tampilkan_kristal(inventory):
+    print("\n=== INVENTORY KRISTAL EVOLUSI ===")
+    for level in range(1, 8):
+        nama = NAMA_KRISTAL[level]
+        jumlah = inventory.get("kristal", {}).get(level, 0)
+        print(f"Lv.{level} [{nama}]: {jumlah} buah")
+    print("=================================")
+
 def bersihkan_layar():
     os.system('cls' if os.name == 'nt' else 'clear')
     
@@ -116,7 +126,9 @@ def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventor
     save_data["graveyard"] = list(graveyard)
     save_data["daftar_party"] = daftar_party
     save_data["menara"] = {"current_floor": menara_game.lantai_sekarang.data.get("no_lantai")}
-    save_data["inventory"] = inventory if inventory else {"tiket_gacha": 0}
+    if not inventory:
+        inventory = {"tiket_gacha": 0, "kristal": {i: 0 for i in range(1, 8)}}
+    save_data["inventory"] = inventory
     save_load.save_game(save_path, save_data)
     
 def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_game, inventory):
@@ -124,8 +136,16 @@ def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_gam
         print("[Info] Save data ditemukan! Memuat progress sebelumnya...")
         if "inventory" in saved_data:
             inventory["tiket_gacha"] = saved_data["inventory"].get("tiket_gacha", 0)
+            
+            loaded_kristal = saved_data["inventory"].get("kristal", {str(i): 0 for i in range(1, 8)})
+            inventory["kristal"] = {int(k): v for k, v in loaded_kristal.items()}
+            
+            for i in range(1, 8):
+                if i not in inventory["kristal"]:
+                    inventory["kristal"][i] = 0
         else:
             inventory["tiket_gacha"] = 0
+            inventory["kristal"] = {i: 0 for i in range(1, 8)}
         
         if "graveyard" in saved_data:
             graveyard.update(saved_data["graveyard"])
@@ -163,3 +183,4 @@ def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_gam
     else:
         print("[Info] Tidak ada save data. Memulai game baru...")
         inventory["tiket_gacha"] = 1
+        inventory["kristal"] = {1: 1000, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0}

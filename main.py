@@ -11,6 +11,7 @@ ROOT_DIR = Path(__file__).resolve().parent
 sys.path.append(str(ROOT_DIR))
 
 from function import *
+from Algoritma.recursion import hitung_kebutuhan_kristal
 from StrukturData.Stack import Stack
 from StrukturData.Queue import Queue 
 
@@ -86,9 +87,10 @@ def main():
             print("1. Lihat Daftar Hero (Sorting)")
             print("2. Cari Hero Spesifik (Searching)")
             print("3. Atur Party")
+            print("4. Ruang Evolusi")
             print("0. KEMBALI ke Lobi Utama")
             
-            pilihan = input("> Pilih aksi (0-3): ")
+            pilihan = input("> Pilih aksi (0-4): ")
             
             if pilihan == "1":
                 navigasi.push("Daftar Hero") 
@@ -96,6 +98,8 @@ def main():
                 navigasi.push("Cari Hero")
             elif pilihan == "3":
                 navigasi.push("Party")
+            elif pilihan == "4":
+                navigasi.push("Ruang Evolusi")
             elif pilihan == "0":
                 navigasi.pop() 
 
@@ -166,6 +170,11 @@ def main():
                         else:
                             lst_nama.append(input(f"Masukkan NAMA ANGGOTA {i-1} (Kosongkan jika tidak ada): ").strip())
                     
+                    if lst_nama[0] == "" and any(nama != "" for nama in lst_nama[1:]):
+                        print("\n[!] Gagal: Posisi KAPTEN wajib diisi terlebih dahulu sebelum anggota lain!")
+                        input("Tekan Enter untuk lanjut...")
+                        continue
+                        
                     nama_dimasukkan = [nama for nama in lst_nama if nama != ""]
                     
                     id_dimasukkan = []
@@ -215,6 +224,95 @@ def main():
                 daftar_party[nama_baru] = []
                 print(f"\n[+] {nama_baru} berhasil dibuat! Gunakan menu Edit untuk mengisi hero.")
                 input("Tekan Enter untuk lanjut...")
+                    
+            elif pilihan == "0":
+                navigasi.pop()
+        # ==========================================
+        # LOGIKA MENU: RUANG EVOLUSI
+        # ==========================================
+        elif layar_sekarang == "Ruang Evolusi":
+            tampilkan_kristal(inventory)
+            print("\n1. Evolusi Hero")
+            print("2. Sintesis Kristal (Pabrik)")
+            print("0. KEMBALI ke Barrack")
+            
+            pilihan = input("> Pilih aksi: ")
+            
+            if pilihan == "1":
+                print("\n--- DAFTAR HERO SIAP EVOLUSI ---")
+                bisa_evolusi = []
+                for h_id, hero in barrack_aktif.items():
+                    if hero.level >= hero.max_level and hero.star_level < 7:
+                        bisa_evolusi.append(hero)
+                        print(f"[{hero.id}] {hero.nama} ({hero.star_level}⭐) - Lv.{hero.level}")
+                
+                if not bisa_evolusi:
+                    input("\nTidak ada hero yang siap dievolusi (Harus Max Level & < 7⭐). Tekan Enter...")
+                else:
+                    target_id = input("\nMasukkan ID Hero yang ingin dievolusi (0 Batal): ").upper()
+                    if target_id != "0":
+                        target_hero = next((h for h in bisa_evolusi if h.id == target_id), None)
+                        
+                        if target_hero:
+                            # Butuh kristal level = star_level + 1
+                            kristal_dibutuhkan = target_hero.star_level + 1
+                            if inventory["kristal"].get(kristal_dibutuhkan, 0) >= 1:
+                                inventory["kristal"][kristal_dibutuhkan] -= 1
+                                target_hero.evolusi()
+                                input("Tekan Enter untuk lanjut...")
+                            else:
+                                print(f"\n[!] Gagal: Membutuhkan 1 Kristal {NAMA_KRISTAL[kristal_dibutuhkan]} (Lv.{kristal_dibutuhkan})!")
+                                input("Tekan Enter untuk lanjut...")
+                        else:
+                            input("\n[!] ID tidak valid. Tekan Enter...")
+                            
+            elif pilihan == "2":
+                print("\n--- SINTESIS KRISTAL ---")
+                print("Setiap kristal butuh 5 kristal 1 tingkat di bawahnya.")
+                print("Gunakan Kalkulator Rekursi untuk menghitung total ekuivalen Kristal Merah!")
+                print("\n1. Sintesis Kristal Manual (Naik 1 Tingkat)")
+                print("2. Kalkulator Kebutuhan (Rekursi)")
+                sub_pil = input("> Pilih: ")
+                
+                if sub_pil == "1":
+                    try:
+                        tgt_lvl = int(input("Masukkan level kristal target (2-7): "))
+                        if 2 <= tgt_lvl <= 7:
+                            jml = int(input("Jumlah yang ingin disintesis: "))
+                            if jml > 0:
+                                butuh = jml * 5
+                                sisa = inventory["kristal"].get(tgt_lvl - 1, 0)
+                                if sisa >= butuh:
+                                    inventory["kristal"][tgt_lvl - 1] -= butuh
+                                    inventory["kristal"][tgt_lvl] = inventory["kristal"].get(tgt_lvl, 0) + jml
+                                    print(f"\n[+] Berhasil mensintesis {jml} Kristal {NAMA_KRISTAL[tgt_lvl]}!")
+                                else:
+                                    print(f"\n[!] Gagal: Butuh {butuh} Kristal {NAMA_KRISTAL[tgt_lvl-1]} (Hanya punya {sisa}).")
+                            else:
+                                print("\nJumlah tidak valid.")
+                        else:
+                            print("\nLevel target harus 2 hingga 7.")
+                    except ValueError:
+                        print("\nMasukan harus berupa angka.")
+                    input("Tekan Enter untuk lanjut...")
+                    
+                elif sub_pil == "2":
+                    try:
+                        tgt_lvl = int(input("Ingin membuat kristal level berapa? (2-7): "))
+                        if 2 <= tgt_lvl <= 7:
+                            jml = int(input("Jumlah yang ingin dibuat: "))
+                            if jml > 0:
+                                total_merah = hitung_kebutuhan_kristal(1, tgt_lvl, jml)
+                                print(f"\n[INFO] Berdasarkan perhitungan REKURSI:")
+                                print(f"Untuk membuat {jml} Kristal {NAMA_KRISTAL[tgt_lvl]} (Lv.{tgt_lvl}),")
+                                print(f"Kamu setara membutuhkan total {total_merah} Kristal Merah (Lv.1)!")
+                            else:
+                                print("\nJumlah tidak valid.")
+                        else:
+                            print("\nLevel harus 2 hingga 7.")
+                    except ValueError:
+                        print("\nMasukan harus berupa angka.")
+                    input("Tekan Enter untuk lanjut...")
                     
             elif pilihan == "0":
                 navigasi.pop()
@@ -419,7 +517,9 @@ def main():
                     hadiah_xp = data_pilihan['no_lantai'] * 15
                     if is_boss: hadiah_xp *= 10
                     print("Semua hero mendapatkan", hadiah_xp, "EXP")
-                    if is_boss:
+                    is_first_clear = (lantai_pilihan == menara_game.lantai_sekarang and not inventory.get("tamat", False))
+                    
+                    if is_boss and is_first_clear:
                         inventory["tiket_gacha"] = inventory.get("tiket_gacha", 0) + 1
                         print("🎉 BONUS BOSS: Mendapatkan 1x Tiket Gacha (10 Pulls)!")
                     
@@ -435,6 +535,7 @@ def main():
                         if menara_game.NaikLantai():
                             print(f"\n[+] PROGRESS: Bergerak maju ke Lantai {menara_game.lantai_sekarang.data['no_lantai']}")
                         else:
+                            inventory["tamat"] = True
                             print(f"\n[+] TOWER CLEARED! Kamu sudah mencapai puncak menara!")
                     else:
                         print(f"\n[+] berhasil menyelesaikan lantai {data_pilihan["no_lantai"]}")
