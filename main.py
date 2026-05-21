@@ -100,12 +100,15 @@ def cek_kematian(daftar_party):
             if hero_id in anggota:
                 anggota.remove(hero_id)
                 
-# def cek_status(node_party):
-#     for anggota in node_party.anak:
-#         if anggota.entitas.is_alive and anggota.entitas.hp <= 0.2 * anggota.entitas.hp_max:
-#             print(anggota.entitas.nama, "sekarat")
-#         if anggota.peran in ["Master", "Kapten", "Anggota"]:
-#             cek_status(node_party)
+                
+# fungsi cek status yg akan menampilkan hero" yg sekarat ketika perang telah selesai
+def cek_status(node_party):
+    for anggota in node_party.anak:
+        if anggota.entitas.is_alive and anggota.entitas.hp <= 0.2 * anggota.entitas.hp_max:
+            print(f"⚠️  PERINGATAN: {anggota.entitas.nama} sekarat (HP: {anggota.entitas.hp}/{anggota.entitas.hp_max})")
+        if anggota.peran in ["Master", "Kapten", "Anggota"]:
+            cek_status(anggota)
+
 
 def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game):
     save_path = json_path / "savegame.json"
@@ -545,7 +548,7 @@ def main():
                 for m_id in data_pilihan['id_musuh']:
                     cek_boss = "BOSS" in m_id 
                     
-                    m_hp = 1000 if cek_boss else random.randint(105, 150)
+                    m_hp = 1000 if cek_boss else random.randint(20, 50)
                     m_atk = 150 if cek_boss else random.randint(15, 30)
                     
                     m_entity = Enemy(nama=m_id, hp=m_hp, atk=m_atk, is_boss=cek_boss)
@@ -559,7 +562,7 @@ def main():
                 
                 print("\n--- MENGEVALUASI KONDISI PASUKAN ---")
                 cek_kematian(daftar_party)
-                # cek_status(master_node)
+                cek_status(master_node)
                 
                 if menang:
                     data_pilihan['is_cleared'] = True

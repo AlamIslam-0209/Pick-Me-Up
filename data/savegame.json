@@ -18,17 +18,17 @@
         "H049": {
             "id": "H049",
             "name": "Tino",
-            "hp": 119,
-            "hp_max": 119,
-            "attack": 15,
-            "level": 1,
+            "hp": 159,
+            "hp_max": 159,
+            "attack": 35,
+            "level": 3,
             "star_level": 2,
             "equipment": {
                 "weapon": "Silver Dagger"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 30,
+            "exp_next": 300
         },
         "H037": {
             "id": "H037",
@@ -63,17 +63,17 @@
         "H095": {
             "id": "H095",
             "name": "Nox",
-            "hp": 145,
-            "hp_max": 145,
-            "attack": 21,
-            "level": 1,
+            "hp": 225,
+            "hp_max": 225,
+            "attack": 61,
+            "level": 3,
             "star_level": 4,
             "equipment": {
                 "weapon": "Void Daggers"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 30,
+            "exp_next": 300
         },
         "H030": {
             "id": "H030",
@@ -108,47 +108,47 @@
         "H050": {
             "id": "H050",
             "name": "Uno",
-            "hp": 121,
-            "hp_max": 121,
-            "attack": 14,
-            "level": 1,
+            "hp": 161,
+            "hp_max": 161,
+            "attack": 34,
+            "level": 3,
             "star_level": 2,
             "equipment": {
                 "weapon": "Steel Mace"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 30,
+            "exp_next": 300
         },
         "H074": {
             "id": "H074",
             "name": "Lana",
-            "hp": 135,
-            "hp_max": 135,
-            "attack": 17,
-            "level": 1,
+            "hp": 195,
+            "hp_max": 195,
+            "attack": 47,
+            "level": 3,
             "star_level": 3,
             "equipment": {
                 "weapon": "Steel Spear"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 30,
+            "exp_next": 300
         },
         "H010": {
             "id": "H010",
             "name": "Fira",
-            "hp": 101,
-            "hp_max": 101,
-            "attack": 10,
-            "level": 1,
+            "hp": 121,
+            "hp_max": 121,
+            "attack": 20,
+            "level": 3,
             "star_level": 1,
             "equipment": {
                 "weapon": "Old Staff"
             },
             "is_alive": true,
-            "exp": 0,
-            "exp_next": 100
+            "exp": 30,
+            "exp_next": 300
         }
     },
     "graveyard": [],
@@ -162,6 +162,6 @@
         ]
     },
     "menara": {
-        "current_floor": 1
+        "current_floor": 5
     }
 }
