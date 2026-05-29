@@ -12,8 +12,10 @@ sys.path.append(str(ROOT_DIR))
 
 from function import *
 from Algoritma.recursion import hitung_kebutuhan_kristal
+from Algoritma.searching import linear_search_hero_by_id, linear_search_hero_by_name
+from Algoritma.sorting import sort_heroes_by_id, sort_heroes_by_name, sort_heroes_by_level, sort_heroes_by_star
 from StrukturData.Stack import Stack
-from StrukturData.Queue import Queue 
+from StrukturData.Queue import Queue
 
 def main():
     antrean_gacha = Queue()
@@ -108,17 +110,70 @@ def main():
         # LOGIKA MENU: DAFTAR HERO (Sub-menu Barrack)
         # ==========================================
         elif layar_sekarang == "Daftar Hero":
-            kumpulan_hero = list(barrack_aktif.values()) 
-            for hero in kumpulan_hero:
-                hero.tampilkan_stats()
-            print("\n0. KEMBALI ke Barrack")
+            print("--- URUTKAN HERO ---")
+            print("1. Berdasarkan ID")
+            print("2. Berdasarkan Nama")
+            print("3. Berdasarkan Level")
+            print("4. Berdasarkan Bintang")
+            print("0. KEMBALI ke Barrack")
             
             pilihan = input("> Pilih aksi: ")
             
+            kumpulan_hero = list(barrack_aktif.values())
+            
+            if pilihan in ["1", "2", "3", "4"]:
+                if pilihan == "1": kumpulan_hero = sort_heroes_by_id(kumpulan_hero)
+                elif pilihan == "2": kumpulan_hero = sort_heroes_by_name(kumpulan_hero)
+                elif pilihan == "3": kumpulan_hero = sort_heroes_by_level(kumpulan_hero)
+                elif pilihan == "4": kumpulan_hero = sort_heroes_by_star(kumpulan_hero)
                 
-            if pilihan == "0":
+                print("\n--- DAFTAR HERO ---")
+                for hero in kumpulan_hero:
+                    hero.tampilkan_stats()
+                input("\n(Tekan Enter untuk kembali)")
+                
+            elif pilihan == "0":
                 navigasi.pop()
+
+        # ==========================================
+        # LOGIKA MENU: CARI HERO (Sub-menu Barrack)
+        # ==========================================
+        elif layar_sekarang == "Cari Hero":
+            print("--- CARI HERO ---")
+            print("1. Berdasarkan ID")
+            print("2. Berdasarkan Nama")
+            print("0. KEMBALI ke Barrack")
+            
+            pilihan = input("> Pilih aksi: ")
+            
+            if pilihan == "1":
+                target_id = input("Masukkan ID Hero: ")
+                from Algoritma.searching import linear_search_hero_by_id
+                kumpulan_hero = list(barrack_aktif.values())
+                hasil = linear_search_hero_by_id(kumpulan_hero, target_id)
+                if hasil:
+                    print("\n[+] Hero Ditemukan:")
+                    hasil.tampilkan_stats()
+                else:
+                    print("\n[-] Hero tidak ditemukan!")
+                input("\n(Tekan Enter untuk lanjut)")
                 
+            elif pilihan == "2":
+                target_name = input("Masukkan Nama Hero: ")
+                from Algoritma.searching import linear_search_hero_by_name
+                kumpulan_hero = list(barrack_aktif.values())
+                hasil = linear_search_hero_by_name(kumpulan_hero, target_name)
+                if hasil:
+                    print("\n[+] Hero Ditemukan:")
+                    hasil.tampilkan_stats()
+                else:
+                    print("\n[-] Hero tidak ditemukan!")
+                input("\n(Tekan Enter untuk lanjut)")
+                
+            elif pilihan == "0":
+                navigasi.pop()
+            else:
+                input("Pilihan tidak valid! (Tekan Enter untuk lanjut)")
 
         # ==========================================
         # LOGIKA MENU: ATUR PARTY
@@ -255,7 +310,6 @@ def main():
                         target_hero = next((h for h in bisa_evolusi if h.id == target_id), None)
                         
                         if target_hero:
-                            # Butuh kristal level = star_level + 1
                             kristal_dibutuhkan = target_hero.star_level + 1
                             if inventory["kristal"].get(kristal_dibutuhkan, 0) >= 1:
                                 inventory["kristal"][kristal_dibutuhkan] -= 1
@@ -382,6 +436,21 @@ def main():
                 input("Pilihan tidak valid! (Tekan Enter untuk lanjut)")
                 
                 
+        # ==========================================
+        # LOGIKA MENU: EKSPLORASI
+        # ==========================================
+        elif layar_sekarang == "Eksplorasi":
+            print("--- EKSPLORASI ---")
+            print("Fitur ini sedang dalam pengembangan!")
+            print("0. KEMBALI ke Tower Gate")
+            
+            pilihan = input("> Pilih aksi: ")
+            
+            if pilihan == "0":
+                navigasi.pop()
+            else:
+                input("Pilihan tidak valid! (Tekan Enter)")
+
         # ==========================================
         # LOGIKA MENU: TOWER (PILIH LANTAI)
         # ==========================================
