@@ -4,6 +4,9 @@ class HashTable():
         self.table = [None] * ukuran
 
     def _fungsiHash(self, key):
+        """
+        Mengonversi teks (key) menjadi indeks angka agar data dapat ditempatkan di slot tabel yang tepat.
+        """
         total = 0
 
         for huruf in key:
@@ -12,6 +15,9 @@ class HashTable():
         return total % self.ukuran
     
     def tambah(self, key, value):
+        """
+        Memasukkan data hero baru ke dalam Hash Table pada indeks yang sesuai.
+        """
         indeks = self._fungsiHash(key)
 
         if self.table[indeks] is None:
@@ -20,6 +26,9 @@ class HashTable():
         self.table[indeks].append((key, value))
 
     def cari(self, key):
+        """
+        Mencari data secara spesifik menggunakan key/ID. Pencarian ini sangat cepat.
+        """
         indeks = self._fungsiHash(key)
 
         if self.table[indeks] is not None:
@@ -29,20 +38,10 @@ class HashTable():
 
         return None
     
-    def cari_nama(self, nama_target):
-        nama_target = nama_target.lower()
-        
-        for slot in self.table:
-            if slot is not None:
-                for pasangan in slot:
-                    nama_hero = pasangan[1]['name'].lower()
-                    
-                    if nama_target in nama_hero:
-                        return pasangan[0], pasangan[1] 
-                        
-        return None, None 
-    
     def ambilsemua(self):
+        """
+        Menyatukan semua data yang ada di Hash Table dan mengembalikannya dalam bentuk list.
+        """
         hasil = []
         for slot in self.table:
             if slot is not None:

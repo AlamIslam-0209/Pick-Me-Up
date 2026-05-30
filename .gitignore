@@ -3,3 +3,8 @@ __pycache__/
 *.pyo
 *.pyd
 tempCodeRunnerFile.py
+.env
+savegame.json
+data/blueprint_enemy.json
+data/blueprint_tower.json
+.vscode/

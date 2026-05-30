@@ -5,6 +5,9 @@ class RaidNode:
         self.anak = []      
         
     def tambah_unit(self, node_baru):
+        """
+        Menambahkan anggota baru ke dalam formasi. Posisi Kapten dibatasi maksimal 4 anggota.
+        """
         if self.peran == "Kapten" and len(self.anak) >= 4:
             print(f"[!] Gagal: Party Kapten {self.entitas.nama} sudah penuh.")
             return False
@@ -13,6 +16,9 @@ class RaidNode:
         return True
 
     def tampilkan_struktur_raid(self, level=0):
+        """
+        Menampilkan struktur hierarki anggota party ke layar secara berjenjang.
+        """
         indentasi = "    " * level
         
         print(f"{indentasi} {self.entitas.nama} ({self.peran}) - HP: {self.entitas.hp}")

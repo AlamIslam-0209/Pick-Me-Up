@@ -9,6 +9,9 @@ class CircularLinkedList:
         self.giliran_sekarang = None
         
     def TambahEntity(self, node_tree):
+        """
+        Memasukkan hero atau musuh ke dalam urutan pergiliran serangan.
+        """
         giliran_berikutnya = n.Node(node_tree)
         if not self.head:
             self.head = giliran_berikutnya
@@ -20,16 +23,25 @@ class CircularLinkedList:
             self.tail.next = self.head    
         
     def Mulai(self):
+        """
+        Menentukan siapa petarung yang mendapat giliran menyerang pertama kali di awal ronde.
+        """
         self.giliran_sekarang = self.head
         return self.giliran_sekarang
         
     def NextTurn(self):
+        """
+        Memindahkan giliran serangan ke petarung selanjutnya secara melingkar (berulang).
+        """
         if self.giliran_sekarang:
             self.giliran_sekarang = self.giliran_sekarang.next
             return self.giliran_sekarang
         return None
     
 def siapkan_entitas_ke_arena(node_tree, arena_cll, daftar_pasukan, peran_valid):
+    """
+    Menyeleksi anggota party atau musuh yang masih hidup untuk dimasukkan ke arena pertarungan.
+    """
     if node_tree.peran in peran_valid and node_tree.entitas.is_alive:
         arena_cll.TambahEntity(node_tree)
         daftar_pasukan.append(node_tree) 
@@ -39,6 +51,10 @@ def siapkan_entitas_ke_arena(node_tree, arena_cll, daftar_pasukan, peran_valid):
         
         
 def jalankan_raid_kombat(master_tree, master_musuh_tree, arena_cll):
+    """
+    Menjalankan pertarungan. Semua pahlawan dan musuh akan saling menyerang 
+    secara bergiliran sampai salah satu pihak terkalahkan.
+    """
     pasukan_hero = []
     pasukan_musuh = []
     

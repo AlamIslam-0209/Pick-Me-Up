@@ -4,125 +4,51 @@
 # ██╔═══╝ ██║██║     ██╔═██╗     ██║╚██╔╝██║██╔══╝      ██║   ██║██╔═══╝ 
 # ██║     ██║╚██████╗██║  ██╗    ██║ ╚═╝ ██║███████╗    ╚██████╔╝██║     
 # ╚═╝     ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚══════╝     ╚═════╝ ╚═╝
-import json
-import random
 import sys
-import os
+import time
 from pathlib import Path
-
-from Entities.hero import Hero
-from Entities.enemy import Enemy 
-from Entities.entity import Entity
-from StrukturData.Tree import RaidNode
-from StrukturData.HashTable import HashTable
-from StrukturData.Tower.Combat import CircularLinkedList, jalankan_raid_kombat
-from StrukturData.Tower.MainTower import siapkan_menara
-
-ROOT_DIR = Path(__file__).resolve().parent
-json_path = ROOT_DIR / "data"
 
 ROOT_DIR = Path(__file__).resolve().parent
 sys.path.append(str(ROOT_DIR))
 
-
+from function import *
+from Algoritma.recursion import hitung_kebutuhan_kristal
+from Algoritma.searching import linear_search_hero_by_id, linear_search_hero_by_name
+from Algoritma.sorting import sort_heroes_by_id, sort_heroes_by_name, sort_heroes_by_level, sort_heroes_by_star
 from StrukturData.Stack import Stack
-from StrukturData.Queue import Queue 
-import random
-
-barrack_aktif = {} 
-graveyard = set()
-Daftar_Hero = HashTable(400)
-n = 1
-
-def bersihkan_layar():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    
-def muat_hero():
-    with open(json_path / "heroBlueprints.json", "r") as file:
-        hero_data = json.load(file)
-        
-    for hero_id, hero_info in hero_data.items():
-        Daftar_Hero.tambah(hero_id, hero_info)
-        
-    print(f"[Info] {len(hero_data)} Hero berhasil dimuat ke dalam Hash Table!")
-        
-    
-def proses_gacha(id_antrian):
-    
-    pool_bintang = {1: [], 2: [], 3: [], 4: [], 5: []}
-    
-    for hero_id, hero_data in Daftar_Hero.ambilsemua():
-        if hero_id not in barrack_aktif and hero_id not in graveyard and hero_id not in id_antrian:
-            bintang = hero_data['star_level']
-            pool_bintang[bintang].append(hero_id)
-            
-    if all(len(pool) == 0 for pool in pool_bintang.values()):
-        print("\nGACHA GAGAL: Semua pahlawan di dunia ini sudah terpanggil atau telah gugur.")
-        return None
-
-    bobot_dasar = {
-        5: 0.5,   # Bintang 5: 0.5%
-        4: 1.5,   # Bintang 4: 1.5%
-        3: 5.0,   # Bintang 3: 5.0%
-        2: 20.0,  # Bintang 2: 20.0%
-        1: 73.0   # Bintang 1: 73.0% 
-    }
-    
-    bintang_tersedia = []
-    bobot_tersedia = []
-    
-    for bintang in range(1, 6):
-        if len(pool_bintang[bintang]) > 0:
-            bintang_tersedia.append(bintang)
-            bobot_tersedia.append(bobot_dasar[bintang])
-            
-    bintang_terpilih = random.choices(bintang_tersedia, weights=bobot_tersedia, k=1)[0]
-    
-    id_terpilih = random.choice(pool_bintang[bintang_terpilih])
-    data_mentah = Daftar_Hero.cari(id_terpilih)
-    
-    hero_baru = Hero(data_mentah)
-    return hero_baru
-
-def cek_kematian(daftar_party):
-    id_yang_mati = []
-    
-    for hero_id, hero_obj in barrack_aktif.items():
-        if not hero_obj.is_alive:
-            id_yang_mati.append(hero_id)
-            
-    for hero_id in id_yang_mati:
-        nama = barrack_aktif[hero_id].nama
-        print(f"MEMORIAL: {nama} telah dipindahkan ke Memory Hall. Kematiannya tak akan dilupakan ")
-        graveyard.add(hero_id)
-        del barrack_aktif[hero_id]
-        
-        for anggota in daftar_party.values():
-            if hero_id in anggota:
-                anggota.remove(hero_id)
-                
-# def cek_status(node_party):
-#     for anggota in node_party.anak:
-#         if anggota.entitas.is_alive and anggota.entitas.hp <= 0.2 * anggota.entitas.hp_max:
-#             print(anggota.entitas.nama, "sekarat")
-#         if anggota.peran in ["Master", "Kapten", "Anggota"]:
-#             cek_status(node_party)
-    
+from StrukturData.Queue import Queue
+from StrukturData.Town import siapkan_peta, SingleLinkedList
+from StrukturData.Tower.generate_enemies import generate_blueprint_enemy
+from StrukturData.Tower.IsiTower import generate_blueprint_tower
 
 def main():
-    antrean_gacha = Queue()
-    navigasi = Stack()
-    muat_hero()
-    menara_game = siapkan_menara()
-    daftar_party = {"Party 1": []}
-    id_dalam_antrean = set()
+    antrean_gacha = Queue() # Antrian untuk menyimpan hero hasil gacha sebelum diklaim ke inventory
+    navigasi = Stack() # Stack untuk menyimpan riwayat layar/menu yang dikunjungi
     
-    navigasi.push("Lobi Utama")
+    # [AUTO-GENERATE] Periksa apakah file blueprint musuh & tower ada, jika tidak, buatkan dunia baru!
+    if not (json_path / "blueprint_enemy.json").exists() or not (json_path / "blueprint_tower.json").exists():
+        print("[!] File Blueprint tidak ditemukan. Menghasilkan Dunia Baru secara prosedural...")
+        generate_blueprint_enemy(json_path / "blueprint_enemy.json")
+        generate_blueprint_tower(json_path / "blueprint_tower.json")
+        print("[+] Dunia Berhasil Dibuat!\n")
+        
+    muat_hero() # Memuat data hero daari file json ke dlam game
+    muat_musuh() # Memuat data musuh dari file json ke dalam game
+    menara_game = siapkan_menara() # Siapkan struktur data menara dengan lantai dan musuhnya
+    peta_game = siapkan_peta() # Siapkan Graph peta eksplorasi
+    lokasi_sekarang = "Desa Pemula" # Lokasi awal eksplorasi
+    daftar_party = {"Party 1": []} # Dictionary untuk menyimpan formasi party, key = nama party, value = list ID hero
+    id_dalam_antrean = set() # Set untuk melacak ID hero yang sudah ada di antrean gacha agar tidak duplikat
+    inventory = {"tiket_gacha": 0} # Inventory untuk menyimpan item-item seperti tiket gacha, kristal, dll
+    ekspedisi_aktif = {} # Dictionary untuk menyimpan data pengerahan ekspedisi {hero_id: data}
+    # cek apakah ada save game yang bisa dimuat, kalau ada langsung load dan update state game
+    cek_save_load(save_load.load_game(json_path / "savegame.json"), graveyard, daftar_party, barrack_aktif, menara_game, inventory, ekspedisi_aktif)
+    navigasi.push("Lobi Utama") # Mulai di Lobi Utama
     
     while True:
-        bersihkan_layar()
+        bersihkan_layar() # Membersihkan layar setiap kali masuk loop
         
-        layar_sekarang = navigasi.peek()
+        layar_sekarang = navigasi.peek() # Update layar sekarang berdasarkan top stack navigasi
         
         print("="*45)
         print(f"POSISI SEKARANG: {layar_sekarang.upper()}")
@@ -147,6 +73,8 @@ def main():
                 navigasi.push("Tower Gate")
             elif pilihan == "0":
                 print("Menyimpan progres... Sampai jumpa, Master!")
+                # Siapkan data save
+                save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventory, ekspedisi_aktif)
                 break 
             else:
                 input("Pilihan tidak valid! (Tekan Enter untuk lanjut)")
@@ -158,9 +86,10 @@ def main():
             print("1. Lihat Daftar Hero (Sorting)")
             print("2. Cari Hero Spesifik (Searching)")
             print("3. Atur Party")
+            print("4. Ruang Evolusi")
             print("0. KEMBALI ke Lobi Utama")
             
-            pilihan = input("> Pilih aksi (0-3): ")
+            pilihan = input("> Pilih aksi (0-4): ")
             
             if pilihan == "1":
                 navigasi.push("Daftar Hero") 
@@ -168,6 +97,8 @@ def main():
                 navigasi.push("Cari Hero")
             elif pilihan == "3":
                 navigasi.push("Party")
+            elif pilihan == "4":
+                navigasi.push("Ruang Evolusi")
             elif pilihan == "0":
                 navigasi.pop() 
 
@@ -175,17 +106,69 @@ def main():
         # LOGIKA MENU: DAFTAR HERO (Sub-menu Barrack)
         # ==========================================
         elif layar_sekarang == "Daftar Hero":
-            kumpulan_hero = list(barrack_aktif.values()) 
-            for hero in kumpulan_hero:
-                hero.tampilkan_stats()
-            print("\n0. KEMBALI ke Barrack")
+            print("--- URUTKAN HERO ---")
+            print("1. Berdasarkan ID")
+            print("2. Berdasarkan Nama")
+            print("3. Berdasarkan Level")
+            print("4. Berdasarkan Bintang")
+            print("0. KEMBALI ke Barrack")
             
             pilihan = input("> Pilih aksi: ")
             
+            kumpulan_hero = list(barrack_aktif.values())
+            
+            if pilihan in ["1", "2", "3", "4"]:
+                if pilihan == "1": kumpulan_hero = sort_heroes_by_id(kumpulan_hero)
+                elif pilihan == "2": kumpulan_hero = sort_heroes_by_name(kumpulan_hero)
+                elif pilihan == "3": kumpulan_hero = sort_heroes_by_level(kumpulan_hero)
+                elif pilihan == "4": kumpulan_hero = sort_heroes_by_star(kumpulan_hero)
                 
-            if pilihan == "0":
+                print("\n--- DAFTAR HERO ---")
+                for hero in kumpulan_hero:
+                    print(f"ID: {hero.id}", end=" ")
+                    hero.tampilkan_stats()
+                input("\n(Tekan Enter untuk kembali)")
+                
+            elif pilihan == "0":
                 navigasi.pop()
+
+        # ==========================================
+        # LOGIKA MENU: CARI HERO (Sub-menu Barrack)
+        # ==========================================
+        elif layar_sekarang == "Cari Hero":
+            print("--- CARI HERO ---")
+            print("1. Berdasarkan ID")
+            print("2. Berdasarkan Nama")
+            print("0. KEMBALI ke Barrack")
+            
+            pilihan = input("> Pilih aksi: ")
+            
+            if pilihan == "1":
+                target_id = input("Masukkan ID Hero: ")
+                kumpulan_hero = list(barrack_aktif.values())
+                hasil = linear_search_hero_by_id(kumpulan_hero, target_id)
+                if hasil:
+                    print("\n[+] Hero Ditemukan:")
+                    hasil.tampilkan_stats()
+                else:
+                    print("\n[-] Hero tidak ditemukan!")
+                input("\n(Tekan Enter untuk lanjut)")
                 
+            elif pilihan == "2":
+                target_name = input("Masukkan Nama Hero: ")
+                kumpulan_hero = list(barrack_aktif.values())
+                hasil = linear_search_hero_by_name(kumpulan_hero, target_name)
+                if hasil:
+                    print("\n[+] Hero Ditemukan:")
+                    hasil.tampilkan_stats()
+                else:
+                    print("\n[-] Hero tidak ditemukan!")
+                input("\n(Tekan Enter untuk lanjut)")
+                
+            elif pilihan == "0":
+                navigasi.pop()
+            else:
+                input("Pilihan tidak valid! (Tekan Enter untuk lanjut)")
 
         # ==========================================
         # LOGIKA MENU: ATUR PARTY
@@ -238,6 +221,11 @@ def main():
                         else:
                             lst_nama.append(input(f"Masukkan NAMA ANGGOTA {i-1} (Kosongkan jika tidak ada): ").strip())
                     
+                    if lst_nama[0] == "" and any(nama != "" for nama in lst_nama[1:]):
+                        print("\n[!] Gagal: Posisi KAPTEN wajib diisi terlebih dahulu sebelum anggota lain!")
+                        input("Tekan Enter untuk lanjut...")
+                        continue
+                        
                     nama_dimasukkan = [nama for nama in lst_nama if nama != ""]
                     
                     id_dimasukkan = []
@@ -253,6 +241,16 @@ def main():
                         
                         if id_ditemukan is None:
                             print(f"[!] Gagal: Hero dengan nama '{nama_target}' tidak ada di Barrack!")
+                            valid = False
+                            break
+                            
+                        if id_ditemukan in id_dimasukkan:
+                            print(f"[!] Gagal: {barrack_aktif[id_ditemukan].nama} sudah terdaftar di party ini!")
+                            valid = False
+                            break
+                            
+                        if barrack_aktif[id_ditemukan].is_exploring:
+                            print(f"[!] Gagal: {barrack_aktif[id_ditemukan].nama} sedang menjalani ekspedisi di luar!")
                             valid = False
                             break
                             
@@ -285,12 +283,101 @@ def main():
                     
             elif pilihan == "0":
                 navigasi.pop()
+        # ==========================================
+        # LOGIKA MENU: RUANG EVOLUSI
+        # ==========================================
+        elif layar_sekarang == "Ruang Evolusi":
+            tampilkan_kristal(inventory)
+            print("\n1. Evolusi Hero")
+            print("2. Sintesis Kristal (Pabrik)")
+            print("0. KEMBALI ke Barrack")
+            
+            pilihan = input("> Pilih aksi: ")
+            
+            if pilihan == "1":
+                print("\n--- DAFTAR HERO SIAP EVOLUSI ---")
+                bisa_evolusi = []
+                for h_id, hero in barrack_aktif.items():
+                    if hero.level >= hero.max_level and hero.star_level < 7:
+                        bisa_evolusi.append(hero)
+                        print(f"[{hero.id}] {hero.nama} ({hero.star_level}⭐) - Lv.{hero.level}")
+                
+                if not bisa_evolusi:
+                    input("\nTidak ada hero yang siap dievolusi (Harus Max Level & < 7⭐). Tekan Enter...")
+                else:
+                    target_id = input("\nMasukkan ID Hero yang ingin dievolusi (0 Batal): ").upper()
+                    if target_id != "0":
+                        target_hero = next((h for h in bisa_evolusi if h.id == target_id), None)
+                        
+                        if target_hero:
+                            kristal_dibutuhkan = target_hero.star_level + 1
+                            if inventory["kristal"].get(kristal_dibutuhkan, 0) >= 1:
+                                inventory["kristal"][kristal_dibutuhkan] -= 1
+                                target_hero.evolusi()
+                                input("Tekan Enter untuk lanjut...")
+                            else:
+                                print(f"\n[!] Gagal: Membutuhkan 1 Kristal {NAMA_KRISTAL[kristal_dibutuhkan]} (Lv.{kristal_dibutuhkan})!")
+                                input("Tekan Enter untuk lanjut...")
+                        else:
+                            input("\n[!] ID tidak valid. Tekan Enter...")
+                            
+            elif pilihan == "2":
+                print("\n--- SINTESIS KRISTAL ---")
+                print("Setiap kristal butuh 5 kristal 1 tingkat di bawahnya.")
+                print("Gunakan Kalkulator Rekursi untuk menghitung total ekuivalen Kristal Merah!")
+                print("\n1. Sintesis Kristal Manual (Naik 1 Tingkat)")
+                print("2. Kalkulator Kebutuhan (Rekursi)")
+                sub_pil = input("> Pilih: ")
+                
+                if sub_pil == "1":
+                    try:
+                        tgt_lvl = int(input("Masukkan level kristal target (2-7): "))
+                        if 2 <= tgt_lvl <= 7:
+                            jml = int(input("Jumlah yang ingin disintesis: "))
+                            if jml > 0:
+                                butuh = jml * 5
+                                sisa = inventory["kristal"].get(tgt_lvl - 1, 0)
+                                if sisa >= butuh:
+                                    inventory["kristal"][tgt_lvl - 1] -= butuh
+                                    inventory["kristal"][tgt_lvl] = inventory["kristal"].get(tgt_lvl, 0) + jml
+                                    print(f"\n[+] Berhasil mensintesis {jml} Kristal {NAMA_KRISTAL[tgt_lvl]}!")
+                                else:
+                                    print(f"\n[!] Gagal: Butuh {butuh} Kristal {NAMA_KRISTAL[tgt_lvl-1]} (Hanya punya {sisa}).")
+                            else:
+                                print("\nJumlah tidak valid.")
+                        else:
+                            print("\nLevel target harus 2 hingga 7.")
+                    except ValueError:
+                        print("\nMasukan harus berupa angka.")
+                    input("Tekan Enter untuk lanjut...")
+                    
+                elif sub_pil == "2":
+                    try:
+                        tgt_lvl = int(input("Ingin membuat kristal level berapa? (2-7): "))
+                        if 2 <= tgt_lvl <= 7:
+                            jml = int(input("Jumlah yang ingin dibuat: "))
+                            if jml > 0:
+                                total_merah = hitung_kebutuhan_kristal(1, tgt_lvl, jml)
+                                print(f"\n[INFO] Berdasarkan perhitungan REKURSI:")
+                                print(f"Untuk membuat {jml} Kristal {NAMA_KRISTAL[tgt_lvl]} (Lv.{tgt_lvl}),")
+                                print(f"Kamu setara membutuhkan total {total_merah} Kristal Merah (Lv.1)!")
+                            else:
+                                print("\nJumlah tidak valid.")
+                        else:
+                            print("\nLevel harus 2 hingga 7.")
+                    except ValueError:
+                        print("\nMasukan harus berupa angka.")
+                    input("Tekan Enter untuk lanjut...")
+                    
+            elif pilihan == "0":
+                navigasi.pop()
 
         # ==========================================
         # LOGIKA MENU: SUMMON HALL
         # ==========================================
         elif layar_sekarang == "Summon Hall":
             print(f"--- ANTREAN KLAIM: {antrean_gacha.size()} Hero Menunggu ---")
+            print(f"--- TIKET GACHA: {inventory.get('tiket_gacha', 0)}x Tiket (1 Tiket = 10 Pull) ---")
             print("-" * 45)
             
             print("1. Tarik 10x Hero Baru (Gacha)")
@@ -300,15 +387,19 @@ def main():
             pilihan = input("> Pilih aksi: ")
             
             if pilihan == "1":
-                print("\n[+] Menarik 10 Hero ke dalam antrean...")
-                for i in range(10):
-                    hero_gacha = proses_gacha(id_dalam_antrean)
+                if inventory.get("tiket_gacha", 0) > 0:
+                    print("\n[+] Menarik 10 Hero ke dalam antrean...")
+                    inventory["tiket_gacha"] -= 1
+                    for i in range(10):
+                        hero_gacha = proses_gacha(id_dalam_antrean)
+                        
+                        if hero_gacha:
+                            antrean_gacha.enqueue(hero_gacha)
+                            id_dalam_antrean.add(hero_gacha.id) 
                     
-                    if hero_gacha:
-                        antrean_gacha.enqueue(hero_gacha)
-                        id_dalam_antrean.add(hero_gacha.id) 
-                
-                input("Gacha selesai! 10 Hero telah masuk antrean. (Tekan Enter)")
+                    input("Gacha selesai! 10 Hero telah masuk antrean. Sisa Tiket: " + str(inventory["tiket_gacha"]) + " (Tekan Enter)")
+                else:
+                    input("\n[!] Gagal: Kamu tidak punya Tiket Gacha. Kalahkan boss lantai untuk mendapatkannya! (Tekan Enter)")
                 
             elif pilihan == "2":
                 if antrean_gacha.is_empty():
@@ -344,7 +435,143 @@ def main():
             else:
                 input("Pilihan tidak valid! (Tekan Enter untuk lanjut)")
                 
+        # ==========================================
+        # LOGIKA MENU: EKSPLORASI
+        # ==========================================
+        elif layar_sekarang == "Eksplorasi":
+            print("--- SISTEM EKSPEDISI OTOMATIS (REAL-TIME) ---")
+            print("1. Mulai Ekspedisi Baru")
+            print("2. Cek Status Ekspedisi Aktif")
+            print("0. KEMBALI ke Tower Gate")
+            
+            pilihan = input("> Pilih aksi: ")
+            
+            if pilihan == "1":
+                if len(ekspedisi_aktif) >= 5:
+                    print("\n[!] Batas maksimal ekspedisi tercapai! (Maks. 5 Ekspedisi)")
+                    print("Tunggu hingga ada ekspedisi yang selesai terlebih dahulu.")
+                    input("Tekan Enter untuk kembali...")
+                    continue
+
+                # CEK KETERSEDIAAN HERO
+                hero_nganggur = []
+                for h_id, h_obj in barrack_aktif.items():
+                    dipakai_di_party = any(h_id in party for party in daftar_party.values())
+                    if not dipakai_di_party and not h_obj.is_exploring:
+                        hero_nganggur.append(h_obj)
+                        
+                if not hero_nganggur:
+                    print("\n[!] Tidak ada hero yang tersedia untuk ekspedisi.")
+                    print("Semua hero sedang berada di Party atau sedang dalam ekspedisi lain.")
+                    input("Tekan Enter untuk kembali...")
+                    continue
+                    
+                print("\n--- PILIH HERO UNTUK EKSPEDISI ---")
+                for i, h in enumerate(hero_nganggur, 1):
+                    print(f"{i}. {h.nama} [Lv.{h.level} | {h.star_level}⭐]")
+                print("0. BATAL")
                 
+                pil_hero = input("> Pilih nomor hero: ")
+                if pil_hero == "0":
+                    continue
+                if not (pil_hero.isdigit() and 1 <= int(pil_hero) <= len(hero_nganggur)):
+                    input("\n[!] Pilihan tidak valid! (Tekan Enter)")
+                    continue
+                    
+                hero_dipilih = hero_nganggur[int(pil_hero) - 1]
+                
+                # MULAI RANGKAI RUTE
+                rute_ekspedisi = SingleLinkedList()
+                lokasi_awal = "Desa Pemula"
+                rute_ekspedisi.tambah_di_akhir(lokasi_awal, 0)
+                lokasi_sementara = lokasi_awal
+                total_waktu = 0
+                
+                print(f"\n[+] {hero_dipilih.nama} bersiap untuk berangkat!")
+                print("[Membentuk Rute Ekspedisi]")
+                while True:
+                    print(f"\n📍 Posisi Saat Ini: {lokasi_sementara} | ⏱️ Total Waktu: {total_waktu} Detik")
+                    jalan_tersedia = peta_game.lihat_jalan(lokasi_sementara)
+                    
+                    if not jalan_tersedia:
+                        print("Jalan buntu! Rute ekspedisi berakhir di sini.")
+                        break
+                        
+                    print("Pilih titik tujuan selanjutnya:")
+                    for i, info in enumerate(jalan_tersedia, 1):
+                        print(f"{i}. {info['tujuan']} (+{info['waktu']} Detik)")
+                    print("0. SELESAI (Berangkatkan Ekspedisi)")
+                    
+                    pil_rute = input("> Pilih tujuan: ")
+                    if pil_rute == "0":
+                        break
+                    elif pil_rute.isdigit() and 1 <= int(pil_rute) <= len(jalan_tersedia):
+                        tujuan_dipilih = jalan_tersedia[int(pil_rute) - 1]
+                        rute_ekspedisi.tambah_di_akhir(tujuan_dipilih['tujuan'], tujuan_dipilih['waktu'])
+                        lokasi_sementara = tujuan_dipilih['tujuan']
+                        total_waktu += tujuan_dipilih['waktu']
+                    else:
+                        print("[!] Pilihan tidak valid.")
+                        
+                # Menampilkan rute final
+                daftar_rute = rute_ekspedisi.ambil_semua()
+                if len(daftar_rute) > 1:
+                    waktu_mulai = time.time()
+                    waktu_selesai = waktu_mulai + total_waktu
+                    
+                    hero_dipilih.is_exploring = True
+                    ekspedisi_aktif[hero_dipilih.id] = {
+                        "nama_hero": hero_dipilih.nama,
+                        "waktu_mulai": waktu_mulai,
+                        "waktu_selesai": waktu_selesai,
+                        "waktu_total": total_waktu,
+                        "rute": [item["tujuan"] for item in daftar_rute]
+                    }
+                    
+                    print("\n" + "="*40)
+                    print("🚀 EKSPEDISI DIBERANGKATKAN! 🚀")
+                    print(f"Hero Ditugaskan : {hero_dipilih.nama}")
+                    print(f"Total Waktu     : {total_waktu} Detik")
+                    print("Rute Perjalanan :")
+                    print(" ➔ ".join(ekspedisi_aktif[hero_dipilih.id]["rute"]))
+                    print("="*40)
+                    print("Ekspedisi berjalan secara real-time di belakang layar.")
+                else:
+                    print(f"\n[-] Ekspedisi dibatalkan ({hero_dipilih.nama} tetap di Desa Pemula).")
+                    
+                input("\nTekan Enter untuk kembali...")
+                
+            elif pilihan == "2":
+                print("\n--- STATUS EKSPEDISI AKTIF ---")
+                if not ekspedisi_aktif:
+                    print("Tidak ada ekspedisi yang sedang berjalan.")
+                else:
+                    waktu_sekarang = time.time()
+                    selesai_list = []
+                    
+                    for h_id, data in ekspedisi_aktif.items():
+                        sisa_waktu = int(data["waktu_selesai"] - waktu_sekarang)
+                        
+                        if sisa_waktu <= 0:
+                            # Ekspedisi Selesai
+                            selesai_list.append(h_id)
+                            print(f"[✅ SELESAI] {data['nama_hero']} telah kembali dari {data['rute'][-1]}.")
+                        else:
+                            print(f"[🏃 BERJALAN] {data['nama_hero']} - Sisa Waktu: {sisa_waktu} detik.")
+                    
+                    # Bersihkan ekspedisi yang selesai
+                    for h_id in selesai_list:
+                        if h_id in barrack_aktif:
+                            barrack_aktif[h_id].is_exploring = False
+                        del ekspedisi_aktif[h_id]
+                        
+                input("\nTekan Enter untuk kembali...")
+                
+            elif pilihan == "0":
+                navigasi.pop()
+            else:
+                input("\n[!] Pilihan tidak valid! (Tekan Enter)")
+
         # ==========================================
         # LOGIKA MENU: TOWER (PILIH LANTAI)
         # ==========================================
@@ -457,10 +684,17 @@ def main():
                 for m_id in data_pilihan['id_musuh']:
                     cek_boss = "BOSS" in m_id 
                     
-                    m_hp = 1000 if cek_boss else random.randint(105, 150)
-                    m_atk = 150 if cek_boss else random.randint(15, 30)
+                    if m_id in Daftar_Musuh:
+                        blueprint = Daftar_Musuh[m_id]
+                        m_nama = blueprint["name"]
+                        m_hp = blueprint["hp"]
+                        m_atk = blueprint["atk"]
+                    else:
+                        m_nama = m_id
+                        m_hp = 500 if cek_boss else random.randint(20, 50)
+                        m_atk = 150 if cek_boss else random.randint(15, 30)
                     
-                    m_entity = Enemy(nama=m_id, hp=m_hp, atk=m_atk, is_boss=cek_boss)
+                    m_entity = Enemy(nama=m_nama, hp=m_hp, atk=m_atk, is_boss=cek_boss)
                     m_node = RaidNode(m_entity, "Monster")
                     
                     master_musuh_node.tambah_unit(m_node)
@@ -471,7 +705,7 @@ def main():
                 
                 print("\n--- MENGEVALUASI KONDISI PASUKAN ---")
                 cek_kematian(daftar_party)
-                # cek_status(master_node)
+                cek_status(master_node)
                 
                 if menang:
                     data_pilihan['is_cleared'] = True
@@ -481,6 +715,11 @@ def main():
                     hadiah_xp = data_pilihan['no_lantai'] * 15
                     if is_boss: hadiah_xp *= 10
                     print("Semua hero mendapatkan", hadiah_xp, "EXP")
+                    is_first_clear = (lantai_pilihan == menara_game.lantai_sekarang and not inventory.get("tamat", False))
+                    
+                    if is_boss and is_first_clear:
+                        inventory["tiket_gacha"] = inventory.get("tiket_gacha", 0) + 1
+                        print("🎉 BONUS BOSS: Mendapatkan 1x Tiket Gacha (10 Pulls)!")
                     
                     for nama_p in party_terpilih:
                         for h_id in daftar_party[nama_p]:
@@ -494,6 +733,7 @@ def main():
                         if menara_game.NaikLantai():
                             print(f"\n[+] PROGRESS: Bergerak maju ke Lantai {menara_game.lantai_sekarang.data['no_lantai']}")
                         else:
+                            inventory["tamat"] = True
                             print(f"\n[+] TOWER CLEARED! Kamu sudah mencapai puncak menara!")
                     else:
                         print(f"\n[+] berhasil menyelesaikan lantai {data_pilihan["no_lantai"]}")

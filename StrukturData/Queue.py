@@ -7,9 +7,11 @@ class Queue:
         self._size = 0
 
     def is_empty(self):
+        """Memeriksa apakah antrean sedang kosong."""
         return self.front is None
 
     def enqueue(self, data):
+        """Menambahkan data baru ke posisi paling belakang dari antrean."""
         node_baru = n.Node(data)
         
         if self.rear is None:
@@ -22,6 +24,7 @@ class Queue:
         self._size += 1
 
     def dequeue(self):
+        """Mengambil data dari posisi paling depan dan mengeluarkannya dari antrean."""
         if self.is_empty():
             return "Antrean kosong!"
             
@@ -35,21 +38,11 @@ class Queue:
             
         return pop
 
-    def front_item(self):
-        if self.is_empty():
-            return "Antrean kosong!"
-        return self.front.data
-
     def size(self):
+        """
+        Menghitung total jumlah data yang ada di dalam antrean.
+        """
         return self._size
     
-    def display(self):
-        if self.is_empty():
-            print("Antrean kosong!")
-            return
-        
-        current = self.front
-        while current:
-            print(current.data)
-            current = current.next
+
     

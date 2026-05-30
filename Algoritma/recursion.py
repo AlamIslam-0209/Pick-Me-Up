@@ -1,60 +1,17 @@
 import json
 
-MAX_STAR_LEVEL = 7
+# Algoritma Rekursi untuk menghitung kebutuhan Kristal Evolusi
 
-
-# Load data hero dari file
-def load_heroes(filename):
-    with open(filename, "r") as f:
-        return json.load(f)
-
-
-# Simpan kembali ke file
-def save_heroes(filename, data):
-    with open(filename, "w") as f:
-        json.dump(data, f, indent=4)
-
-
-# syarat evolusi
-def can_evolve(hero):
-    # min level
-    if hero["star_level"] >= MAX_STAR_LEVEL:
-        return False
-
-    if hero["level"] < 10:
-        return False
-
-    return True
-
-
-# Fungsi evolusi
-def evolve_hero(hero):
-    if can_evolve(hero):
-        hero["star_level"] += 1
-
-        # Upgrade stat
-        hero["hp"] += 20
-        hero["attack"] += 5
-
-        return True
-
-    return False
-
-
-# Evolusi berdasarkan ID
-def evolve_by_id(data, hero_id):
-    if hero_id in data:
-        hero = data[hero_id]
-
-        if evolve_hero(hero):
-            print(f"{hero['name']} naik ke ⭐{hero['star_level']}")
-        else:
-            print(f"{hero['name']} tidak bisa evolusi")
-
-    return data
-
-
-
-heroes = load_heroes("heroBlueprints.json")
-heroes = evolve_by_id(heroes, "H001") # Ini nanti dalam menu utama ato game misal mau si player 2 yg evolusi atau semacam itu
-save_heroes("heroBlueprints.json", heroes)
+def hitung_kebutuhan_kristal(level_awal, level_target, jumlah_target=1):
+    """
+    Fungsi rekursif untuk menghitung total kristal level rendah yang dibutuhkan 
+    untuk membuat kristal level yang lebih tinggi.
+    Setiap kenaikan 1 level membutuhkan 5 buah kristal dari level sebelumnya.
+    """
+    if level_awal == level_target:
+        return jumlah_target
+        
+    if level_awal > level_target:
+        return 0 # Tidak bisa memecah kristal (downgrade)
+        
+    return hitung_kebutuhan_kristal(level_awal, level_target - 1, jumlah_target * 5)

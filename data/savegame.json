@@ -1,0 +1,266 @@
+{
+    "barrack_aktif": {
+        "H072": {
+            "id": "H072",
+            "name": "Julia",
+            "hp": 346,
+            "hp_max": 346,
+            "attack": 121,
+            "level": 8,
+            "star_level": 3,
+            "equipment": {
+                "weapon": "Heavy Crossbow"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 50,
+            "exp_next": 800
+        },
+        "H037": {
+            "id": "H037",
+            "name": "Gino",
+            "hp": 169,
+            "hp_max": 169,
+            "attack": 41,
+            "level": 7,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Heavy Crossbow"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 570,
+            "exp_next": 700
+        },
+        "H008": {
+            "id": "H008",
+            "name": "Doyun",
+            "hp": 179,
+            "hp_max": 179,
+            "attack": 47,
+            "level": 8,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Throwing Knives"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 200,
+            "exp_next": 800
+        },
+        "H057": {
+            "id": "H057",
+            "name": "Asher",
+            "hp": 267,
+            "hp_max": 267,
+            "attack": 82,
+            "level": 8,
+            "star_level": 2,
+            "equipment": {
+                "weapon": "Sniper Bow"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 50,
+            "exp_next": 800
+        },
+        "H016": {
+            "id": "H016",
+            "name": "Lira",
+            "hp": 152,
+            "hp_max": 152,
+            "attack": 37,
+            "level": 6,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Spellbook"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 270,
+            "exp_next": 600
+        },
+        "H038": {
+            "id": "H038",
+            "name": "Hugo",
+            "hp": 113,
+            "hp_max": 113,
+            "attack": 12,
+            "level": 1,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Greatsword"
+            },
+            "is_alive": true,
+            "is_exploring": true,
+            "exp": 0,
+            "exp_next": 100
+        },
+        "H041": {
+            "id": "H041",
+            "name": "Keno",
+            "hp": 105,
+            "hp_max": 105,
+            "attack": 11,
+            "level": 1,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Buckler"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 0,
+            "exp_next": 100
+        },
+        "H069": {
+            "id": "H069",
+            "name": "Gina",
+            "hp": 283,
+            "hp_max": 283,
+            "attack": 92,
+            "level": 6,
+            "star_level": 3,
+            "equipment": {
+                "weapon": "Steel Halberd"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 450,
+            "exp_next": 600
+        },
+        "H009": {
+            "id": "H009",
+            "name": "Ewan",
+            "hp": 107,
+            "hp_max": 107,
+            "attack": 11,
+            "level": 1,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Militia Spear"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 0,
+            "exp_next": 100
+        },
+        "H003": {
+            "id": "H003",
+            "name": "Jenna",
+            "hp": 152,
+            "hp_max": 152,
+            "attack": 36,
+            "level": 6,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Trainee Bow"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 270,
+            "exp_next": 600
+        },
+        "H031": {
+            "id": "H031",
+            "name": "Aldo",
+            "hp": 105,
+            "hp_max": 105,
+            "attack": 11,
+            "level": 1,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Tower Shield"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 0,
+            "exp_next": 100
+        },
+        "H025": {
+            "id": "H025",
+            "name": "Urien",
+            "hp": 100,
+            "hp_max": 100,
+            "attack": 11,
+            "level": 1,
+            "star_level": 1,
+            "equipment": {
+                "weapon": "Warhammer"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 0,
+            "exp_next": 100
+        },
+        "H065": {
+            "id": "H065",
+            "name": "Clara",
+            "hp": 228,
+            "hp_max": 228,
+            "attack": 63,
+            "level": 6,
+            "star_level": 2,
+            "equipment": {
+                "weapon": "Iron Mace"
+            },
+            "is_alive": true,
+            "is_exploring": false,
+            "exp": 450,
+            "exp_next": 600
+        }
+    },
+    "graveyard": [
+        "H062",
+        "H030",
+        "H005",
+        "H028",
+        "H006",
+        "H034",
+        "H032"
+    ],
+    "daftar_party": {
+        "Party 1": [
+            "H072",
+            "H057",
+            "H069",
+            "H065",
+            "H008"
+        ],
+        "Party 2": [
+            "H037",
+            "H016",
+            "H003"
+        ]
+    },
+    "menara": {
+        "current_floor": 11
+    },
+    "inventory": {
+        "tiket_gacha": 1,
+        "kristal": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 0,
+            "5": 0,
+            "6": 0,
+            "7": 0
+        }
+    },
+    "ekspedisi_aktif": {
+        "H038": {
+            "nama_hero": "Hugo",
+            "waktu_mulai": 1780117928.936052,
+            "waktu_selesai": 1780118088.936052,
+            "waktu_total": 160,
+            "rute": [
+                "Desa Pemula",
+                "Kota Perbatasan (Wilayah Baron)",
+                "Kota Perdagangan (Wilayah Viscount)",
+                "Kota Militer (Wilayah Earl)",
+                "Benteng Emas (Wilayah Duke)",
+                "Ibu Kota Kerajaan Manusia"
+            ]
+        }
+    }
+}
