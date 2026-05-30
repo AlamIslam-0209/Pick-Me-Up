@@ -2,7 +2,12 @@ import json
 from pathlib import Path
 from StrukturData.Tower.LantaiTower import DoubleLinkedList
 
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+import sys
+
+if getattr(sys, 'frozen', False):
+    ROOT_DIR = Path(sys.executable).parent
+else:
+    ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 json_path = ROOT_DIR / "data"
 
 def siapkan_menara():

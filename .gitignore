@@ -10,3 +10,6 @@ data/blueprint_tower.json
 .vscode/
 cek.py
 gabungan.txt
+*.spec
+dist/
+build/

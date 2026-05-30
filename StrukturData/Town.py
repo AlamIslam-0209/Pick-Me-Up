@@ -1,7 +1,12 @@
 import json
 from pathlib import Path
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
+import sys
+
+if getattr(sys, 'frozen', False):
+    ROOT_DIR = Path(sys.executable).parent
+else:
+    ROOT_DIR = Path(__file__).resolve().parent.parent
 json_path = ROOT_DIR / "data"
 
 class SLLNode:

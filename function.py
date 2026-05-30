@@ -21,7 +21,10 @@ from StrukturData.Stack import Stack
 from StrukturData.Queue import Queue
 from StrukturData.Town import siapkan_peta, SingleLinkedList
 
-ROOT_DIR = Path(__file__).resolve().parent
+if getattr(sys, 'frozen', False):
+    ROOT_DIR = Path(sys.executable).parent
+else:
+    ROOT_DIR = Path(__file__).resolve().parent
 json_path = ROOT_DIR / "data"
 
 from Algoritma import save_load

@@ -9,7 +9,10 @@
 from function import *
 
 
-ROOT_DIR = Path(__file__).resolve().parent
+if getattr(sys, 'frozen', False):
+    ROOT_DIR = Path(sys.executable).parent
+else:
+    ROOT_DIR = Path(__file__).resolve().parent
 sys.path.append(str(ROOT_DIR))
 
 
