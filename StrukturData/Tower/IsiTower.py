@@ -1,10 +1,5 @@
 import json
 import random
-from pathlib import Path
-
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-json_path = ROOT_DIR / "data"
-
 
 tema_musuh = {
     "Hutan Pemula": ["M01", "M02", "M03"],            
@@ -29,42 +24,37 @@ tema_musuh = {
     "Istana Langit": ["M50", "M51", "M52"]            
 }
 
-musuh_default = ["M01", "M02", "M03"] 
-
-def perbarui_menara():
+def generate_blueprint_tower(file_path):
+    data_tower = []
+    lantai_counter = 1
     
-    with open(json_path / "blueprint_tower.json", 'r') as file:
-        data_tower = json.load(file)
-        
-    for lantai in data_tower:
-        lokasi = lantai["nama_lokasi"]
-        is_boss = lantai["is_boss"]
-        
-        pool_musuh = tema_musuh.get(lokasi, musuh_default)
-        
-        if not is_boss:
-            jumlah_musuh = random.randint(2, 5)
-            pasukan = random.choices(pool_musuh, k=jumlah_musuh)
+    # Ada 20 tema. Setiap tema = 5 lantai. Total 100 lantai.
+    for idx, (nama_lokasi, pool_musuh) in enumerate(tema_musuh.items()):
+        for i in range(1, 6):
+            is_boss = (i == 5)
             
-            lantai["id_musuh"] = pasukan
-            
-        else:
-            id_boss_lama = lantai["id_musuh"]
-            
-            if isinstance(id_boss_lama, list):
-                id_boss_lama = id_boss_lama[0]
+            if not is_boss:
+                jumlah_musuh = random.randint(2, 5)
+                pasukan = random.choices(pool_musuh, k=jumlah_musuh)
+            else:
+                id_boss = f"BOSS_{idx + 1:02d}"
+                jumlah_minions = random.randint(1, 3)
+                minions = random.choices(pool_musuh, k=jumlah_minions)
+                pasukan = [id_boss] + minions
                 
-            jumlah_minions = random.randint(1, 3)
-            minions = random.choices(pool_musuh, k=jumlah_minions)
-            
-            pasukan = [id_boss_lama] + minions
-            
-            lantai["id_musuh"] = pasukan
+            lantai = {
+                "no_lantai": lantai_counter,
+                "nama_lokasi": nama_lokasi,
+                "is_boss": is_boss,
+                "id_musuh": pasukan
+            }
+            data_tower.append(lantai)
+            lantai_counter += 1
 
-    with open(json_path / "blueprint_tower.json", 'w') as file:
+    with open(file_path, 'w') as file:
         json.dump(data_tower, file, indent=4)
         
-    print("[+] blueprint_tower.json berhasil diperbarui dengan sistem Multi-Enemy!")
+    print(f"[*] Menghasilkan blueprint tower ({len(data_tower)} Lantai).")
 
 if __name__ == "__main__":
-    perbarui_menara()
+    generate_blueprint_tower("blueprint_tower.json")

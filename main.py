@@ -18,10 +18,20 @@ from Algoritma.sorting import sort_heroes_by_id, sort_heroes_by_name, sort_heroe
 from StrukturData.Stack import Stack
 from StrukturData.Queue import Queue
 from StrukturData.Town import siapkan_peta, SingleLinkedList
+from StrukturData.Tower.generate_enemies import generate_blueprint_enemy
+from StrukturData.Tower.IsiTower import generate_blueprint_tower
 
 def main():
     antrean_gacha = Queue() # Antrian untuk menyimpan hero hasil gacha sebelum diklaim ke inventory
     navigasi = Stack() # Stack untuk menyimpan riwayat layar/menu yang dikunjungi
+    
+    # [AUTO-GENERATE] Periksa apakah file blueprint musuh & tower ada, jika tidak, buatkan dunia baru!
+    if not (json_path / "blueprint_enemy.json").exists() or not (json_path / "blueprint_tower.json").exists():
+        print("[!] File Blueprint tidak ditemukan. Menghasilkan Dunia Baru secara prosedural...")
+        generate_blueprint_enemy(json_path / "blueprint_enemy.json")
+        generate_blueprint_tower(json_path / "blueprint_tower.json")
+        print("[+] Dunia Berhasil Dibuat!\n")
+        
     muat_hero() # Memuat data hero daari file json ke dlam game
     muat_musuh() # Memuat data musuh dari file json ke dalam game
     menara_game = siapkan_menara() # Siapkan struktur data menara dengan lantai dan musuhnya
