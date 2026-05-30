@@ -3,7 +3,8 @@ import random
 import sys
 import os
 from pathlib import Path
-
+import sys
+import time
 from Entities.hero import Hero
 from Entities.enemy import Enemy 
 from Entities.entity import Entity
@@ -11,6 +12,14 @@ from StrukturData.Tree import RaidNode
 from StrukturData.HashTable import HashTable
 from StrukturData.Tower.Combat import CircularLinkedList, jalankan_raid_kombat
 from StrukturData.Tower.MainTower import siapkan_menara
+from StrukturData.Tower.generate_enemies import generate_blueprint_enemy
+from StrukturData.Tower.IsiTower import generate_blueprint_tower
+from Algoritma.recursion import hitung_kebutuhan_kristal
+from Algoritma.searching import linear_search_hero_by_id, linear_search_hero_by_name
+from Algoritma.sorting import sort_heroes_by_id, sort_heroes_by_name, sort_heroes_by_level, sort_heroes_by_star
+from StrukturData.Stack import Stack
+from StrukturData.Queue import Queue
+from StrukturData.Town import siapkan_peta, SingleLinkedList
 
 ROOT_DIR = Path(__file__).resolve().parent
 json_path = ROOT_DIR / "data"
@@ -24,6 +33,19 @@ Daftar_Musuh = {} # Dictionary untuk menyimpan data musuh, dengan ID sebagai key
 n = 1 
 
 NAMA_KRISTAL = {1: "Merah", 2: "Jingga", 3: "Kuning", 4: "Hijau", 5: "Biru", 6: "Nila", 7: "Ungu"}
+
+def generate_world():
+    '''
+    Fungsi untuk menghasilkan dunia baru secara prosedural jika file blueprint musuh atau tower tidak ditemukan.
+    Akan membuat file JSON baru dengan data musuh dan tower yang di-generate secara acak.
+    '''
+    print("[Prosedural] Menghasilkan dunia baru...")
+    if not (json_path / "blueprint_enemy.json").exists() or not (json_path / "blueprint_tower.json").exists():
+        print("[!] File Blueprint tidak ditemukan. Menghasilkan Dunia Baru secara prosedural...")
+        generate_blueprint_enemy(json_path / "blueprint_enemy.json")
+        generate_blueprint_tower(json_path / "blueprint_tower.json")
+        print("[+] Dunia Berhasil Dibuat!\n")
+    print("[Prosedural] Dunia baru berhasil dibuat!")
 
 def tampilkan_kristal(inventory):
     '''

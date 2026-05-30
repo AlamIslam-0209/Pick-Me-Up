@@ -4,39 +4,27 @@
 # ██╔═══╝ ██║██║     ██╔═██╗     ██║╚██╔╝██║██╔══╝      ██║   ██║██╔═══╝ 
 # ██║     ██║╚██████╗██║  ██╗    ██║ ╚═╝ ██║███████╗    ╚██████╔╝██║     
 # ╚═╝     ╚═╝ ╚═════╝╚═╝  ╚═╝    ╚═╝     ╚═╝╚══════╝     ╚═════╝ ╚═╝
-import sys
-import time
-from pathlib import Path
+
+
+from function import *
+
 
 ROOT_DIR = Path(__file__).resolve().parent
 sys.path.append(str(ROOT_DIR))
 
-from function import *
-from Algoritma.recursion import hitung_kebutuhan_kristal
-from Algoritma.searching import linear_search_hero_by_id, linear_search_hero_by_name
-from Algoritma.sorting import sort_heroes_by_id, sort_heroes_by_name, sort_heroes_by_level, sort_heroes_by_star
-from StrukturData.Stack import Stack
-from StrukturData.Queue import Queue
-from StrukturData.Town import siapkan_peta, SingleLinkedList
-from StrukturData.Tower.generate_enemies import generate_blueprint_enemy
-from StrukturData.Tower.IsiTower import generate_blueprint_tower
+
 
 def main():
     antrean_gacha = Queue() # Antrian untuk menyimpan hero hasil gacha sebelum diklaim ke inventory
     navigasi = Stack() # Stack untuk menyimpan riwayat layar/menu yang dikunjungi
     
-    # [AUTO-GENERATE] Periksa apakah file blueprint musuh & tower ada, jika tidak, buatkan dunia baru!
-    if not (json_path / "blueprint_enemy.json").exists() or not (json_path / "blueprint_tower.json").exists():
-        print("[!] File Blueprint tidak ditemukan. Menghasilkan Dunia Baru secara prosedural...")
-        generate_blueprint_enemy(json_path / "blueprint_enemy.json")
-        generate_blueprint_tower(json_path / "blueprint_tower.json")
-        print("[+] Dunia Berhasil Dibuat!\n")
+    # [AUTO-GENERATE] Periksa apakah file blueprint musuh & tower ada, jika tidak, buatkan dunia baru
+    generate_world() # Fungsi untuk generate blueprint musuh & tower jika belum ada
         
     muat_hero() # Memuat data hero daari file json ke dlam game
     muat_musuh() # Memuat data musuh dari file json ke dalam game
     menara_game = siapkan_menara() # Siapkan struktur data menara dengan lantai dan musuhnya
     peta_game = siapkan_peta() # Siapkan Graph peta eksplorasi
-    lokasi_sekarang = "Desa Pemula" # Lokasi awal eksplorasi
     daftar_party = {"Party 1": []} # Dictionary untuk menyimpan formasi party, key = nama party, value = list ID hero
     id_dalam_antrean = set() # Set untuk melacak ID hero yang sudah ada di antrean gacha agar tidak duplikat
     inventory = {"tiket_gacha": 0} # Inventory untuk menyimpan item-item seperti tiket gacha, kristal, dll
