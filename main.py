@@ -251,6 +251,11 @@ def main():
                             valid = False
                             break
                             
+                        if barrack_aktif[id_ditemukan].is_exploring:
+                            print(f"[!] Gagal: {barrack_aktif[id_ditemukan].nama} sedang menjalani ekspedisi di luar!")
+                            valid = False
+                            break
+                            
                         for nama_p, anggota_p in daftar_party.items():
                             if nama_p != target_party and id_ditemukan in anggota_p:
                                 print(f"[!] Gagal: {barrack_aktif[id_ditemukan].nama} sedang bertugas di {nama_p}!")

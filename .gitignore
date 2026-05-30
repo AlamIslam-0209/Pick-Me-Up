@@ -5,5 +5,5 @@ __pycache__/
 tempCodeRunnerFile.py
 .env
 savegame.json
-blueprint_enemy.json
-blueprint_tower.json
+data/blueprint_enemy.json
+data/blueprint_tower.json
