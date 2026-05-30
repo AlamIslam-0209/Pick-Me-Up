@@ -6,6 +6,9 @@ class Enemy(Entity):
         self.is_boss = is_boss
         
     def pesan_kematian(self):
+        """
+        Menampilkan dialog kematian saat musuh atau boss berhasil dikalahkan.
+        """
         if self.is_boss:
             print(f"[BOSS KALAH] {self.nama} meraung membelah bumi! 'TIDAK MUNGKIN... BAGAIMANA BISA AKU KALAH?!.....'")
         else:

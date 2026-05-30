@@ -1,10 +1,9 @@
 def binary_search_hero_by_id(kumpulan_hero, target_id):
     """
-    Mencari hero pakai teknik Binary Search berdasarkan ID.
-    Ibarat nyari kata di kamus: kita buka bagian tengah dulu, kalau ID yang dicari
-    lebih besar, cari di separuh kanan. Kalau lebih kecil, cari di separuh kiri.
+    Mencari hero berdasarkan ID menggunakan metode Binary Search.
+    Pencarian dilakukan dengan membagi data menjadi dua bagian secara berulang.
     
-    PENTING: List hero wajib udah berurutan (disorting) berdasarkan ID ya biar nggak nyasar!
+    Catatan: Kumpulan hero harus sudah diurutkan berdasarkan ID sebelum memanggil fungsi ini.
     """
     left = 0
     right = len(kumpulan_hero) - 1
@@ -24,11 +23,10 @@ def binary_search_hero_by_id(kumpulan_hero, target_id):
 
 def binary_search_hero_by_name(kumpulan_hero, target_name):
     """
-    Mencari hero berdasarkan Nama pakai Binary Search.
-    Sama kayak fungsi di atas, tapi patokannya adalah nama hero.
-    Santai aja mau ngetik huruf besar atau kecil, tetep bakal nyambung (case-insensitive).
+    Mencari hero berdasarkan nama menggunakan metode Binary Search.
+    Pencarian mengabaikan huruf besar dan kecil (case-insensitive).
     
-    PENTING: Pastiin list hero udah di-sorting menurut abjad dulu sebelum manggil ini!
+    Catatan: Kumpulan hero harus sudah diurutkan secara abjad sebelum memanggil fungsi ini.
     """
     left = 0
     right = len(kumpulan_hero) - 1
@@ -49,8 +47,8 @@ def binary_search_hero_by_name(kumpulan_hero, target_name):
 
 def linear_search_hero_by_id(kumpulan_hero, target_id):
     """
-    Mencari hero berdasarkan ID pakai gaya paling nyantai: dicek satu-satu dari awal sampai akhir!
-    Sangat cocok dipakai kalau list hero lagi acak-acakan (belum di-sorting).
+    Mencari hero berdasarkan ID dengan memeriksa data satu per satu dari awal.
+    Metode ini cocok digunakan jika kumpulan hero belum diurutkan.
     """
     for hero in kumpulan_hero:
         if hero.id == target_id:
@@ -59,9 +57,9 @@ def linear_search_hero_by_id(kumpulan_hero, target_id):
 
 def linear_search_hero_by_name(kumpulan_hero, target_name):
     """
-    Mencari hero berdasarkan Nama, dicek satu-satu secara urut (Linear Search).
-    Bisa dipakai kapan aja walau list heronya belum berurutan.
-    Aman buat huruf besar/kecil.
+    Mencari hero berdasarkan nama dengan memeriksa data satu per satu.
+    Pencarian mengabaikan huruf besar dan kecil (case-insensitive).
+    Bisa digunakan pada kumpulan hero yang belum diurutkan.
     """
     target_name_lower = target_name.lower()
     for hero in kumpulan_hero:

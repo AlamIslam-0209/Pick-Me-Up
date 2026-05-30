@@ -18,21 +18,22 @@ from StrukturData.Stack import Stack
 from StrukturData.Queue import Queue
 
 def main():
-    antrean_gacha = Queue()
-    navigasi = Stack()
-    muat_hero()
-    muat_musuh()
-    menara_game = siapkan_menara()
-    daftar_party = {"Party 1": []}
-    id_dalam_antrean = set()
-    inventory = {"tiket_gacha": 0}
+    antrean_gacha = Queue() # Antrian untuk menyimpan hero hasil gacha sebelum diklaim ke inventory
+    navigasi = Stack() # Stack untuk menyimpan riwayat layar/menu yang dikunjungi
+    muat_hero() # Memuat data hero daari file json ke dlam game
+    muat_musuh() # Memuat data musuh dari file json ke dalam game
+    menara_game = siapkan_menara() # Siapkan struktur data menara dengan lantai dan musuhnya
+    daftar_party = {"Party 1": []} # Dictionary untuk menyimpan formasi party, key = nama party, value = list ID hero
+    id_dalam_antrean = set() # Set untuk melacak ID hero yang sudah ada di antrean gacha agar tidak duplikat
+    inventory = {"tiket_gacha": 0} # Inventory untuk menyimpan item-item seperti tiket gacha, kristal, dll
+    # cek apakah ada save game yang bisa dimuat, kalau ada langsung load dan update state game
     cek_save_load(save_load.load_game(json_path / "savegame.json"), graveyard, daftar_party, barrack_aktif, menara_game, inventory)
-    navigasi.push("Lobi Utama")
+    navigasi.push("Lobi Utama") # Mulai di Lobi Utama
     
     while True:
-        bersihkan_layar()
+        bersihkan_layar() # Membersihkan layar setiap kali masuk loop
         
-        layar_sekarang = navigasi.peek()
+        layar_sekarang = navigasi.peek() # Update layar sekarang berdasarkan top stack navigasi
         
         print("="*45)
         print(f"POSISI SEKARANG: {layar_sekarang.upper()}")
@@ -58,27 +59,7 @@ def main():
             elif pilihan == "0":
                 print("Menyimpan progres... Sampai jumpa, Master!")
                 # Siapkan data save
-                save_data = {}
-                save_data["barrack_aktif"] = {}
-                for h_id, hero_obj in barrack_aktif.items():
-                    save_data["barrack_aktif"][h_id] = {
-                        "id": hero_obj.id,
-                        "name": hero_obj.nama,
-                        "hp": hero_obj.hp,
-                        "hp_max": hero_obj.hp_max,
-                        "attack": hero_obj.attack,
-                        "level": hero_obj.level,
-                        "star_level": hero_obj.star_level,
-                        "equipment": {"weapon": getattr(hero_obj, "weapon", None)},
-                        "is_alive": hero_obj.is_alive,
-                        "exp": getattr(hero_obj, "exp", 0),
-                        "exp_next": getattr(hero_obj, "exp_next", hero_obj.level*100)
-                    }
-                save_data["graveyard"] = list(graveyard)
-                save_data["daftar_party"] = daftar_party
-                save_data["menara"] = {"current_floor": menara_game.lantai_sekarang.data.get("no_lantai")}
-                save_data["inventory"] = inventory
-                save_load.save_game(json_path / "savegame.json", save_data)
+                save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventory)
                 break 
             else:
                 input("Pilihan tidak valid! (Tekan Enter untuk lanjut)")
@@ -129,6 +110,7 @@ def main():
                 
                 print("\n--- DAFTAR HERO ---")
                 for hero in kumpulan_hero:
+                    print(f"ID: {hero.id}", end=" ")
                     hero.tampilkan_stats()
                 input("\n(Tekan Enter untuk kembali)")
                 

@@ -17,14 +17,24 @@ class Hero(Entity):
         self.exp_next = self.level * 100 
         
     def pesan_kematian(self):
+        """
+        Menampilkan teks saat hero gugur dalam pertarungan.
+        """
         print(f"{str(self.nama).capitalize()}[{'⭐' * self.star_level}] TELAH KEMBALI KE PELUKAN SANG DEWI! Semangat juangnya akan selalu dikenang selamanya")
     
     def pulihkan_kondisi(self):
+        """
+        Memulihkan HP hero hingga kembali penuh (Max HP). Digunakan setelah menyelesaikan satu lantai.
+        """
         if self.is_alive:
             self.hp = self.hp_max
             
             
     def tambah_xp(self, jumlah):
+        """
+        Menambahkan poin EXP (pengalaman) ke hero. 
+        Jika jumlah EXP melebihi batas yang dibutuhkan, hero akan otomatis naik level.
+        """
         if not self.is_alive:
             return
         
@@ -36,6 +46,10 @@ class Hero(Entity):
         
 
     def level_up(self):
+        """
+        Meningkatkan status batas HP dan Attack hero setiap kali naik level.
+        Hero tidak dapat naik level lagi jika sudah menyentuh batas maksimal dari bintangnya.
+        """
         if not self.is_alive:
             print(f"[!] Tidak bisa menaikkan level {self.nama} karena ia sudah gugur!")
             return False
@@ -60,7 +74,10 @@ class Hero(Entity):
             return False
 
     def evolusi(self):
-        """Menaikkan bintang hero jika sudah mencapai max level"""
+        """
+        Meningkatkan jumlah bintang hero agar batas level maksimalnya terbuka kembali.
+        Batas tertinggi untuk evolusi hero adalah 7 bintang.
+        """
         if self.star_level >= 7:
             print(f"[!] {self.nama} sudah mencapai batas kelangkaan tertinggi (7⭐)!")
             return False
@@ -80,6 +97,7 @@ class Hero(Entity):
         return True
 
     def tampilkan_stats(self):
+        """Menampilkan ringkasan informasi, status kesehatan, dan senjata yang digunakan hero."""
         status = "Hidup" if self.is_alive else "GUGUR"
         print(f"[{self.star_level}⭐] {self.nama} (Lv.{self.level}/{self.max_level}) - {status}")
         print(f"    Senjata: {self.weapon} | HP: {self.hp}/{self.hp_max} | ATK: {self.attack}")

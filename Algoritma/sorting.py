@@ -1,12 +1,11 @@
 def _merge_sort(arr, key):
     """
-    Fungsi inti dari Merge Sort. Cara kerjanya mirip seperti membagi tumpukan kartu:
-    1. Bagi list hero menjadi dua bagian (kiri dan kanan) sampai tersisa 1 hero saja.
-    2. Urutkan dan gabungkan kembali (merge) perlahan-lahan dari bawah ke atas.
+    Fungsi utama untuk mengurutkan data menggunakan algoritma Merge Sort.
+    Data akan dibagi menjadi dua bagian secara terus-menerus, lalu digabungkan kembali secara berurutan.
     
     Argumen:
-    - arr: List pahlawan/data yang mau diurutkan.
-    - key: Fungsi kecil penentu patokan urutan (bisa ID, Nama, Level, dll).
+    - arr: List data yang ingin diurutkan.
+    - key: Fungsi untuk menentukan atribut yang dijadikan patokan urutan (misalnya ID, nama, level).
     """
     if len(arr) <= 1:
         return arr[:]
@@ -33,17 +32,17 @@ def _merge_sort(arr, key):
     return merged
 
 def sort_heroes_by_id(kumpulan_hero):
-    """Bantu urutin list hero berdasarkan ID-nya (contoh: H001, H002) secara berurutan."""
+    """Mengurutkan daftar hero berdasarkan ID mereka secara menaik."""
     return _merge_sort(kumpulan_hero, key=lambda h: h.id)
 
 def sort_heroes_by_name(kumpulan_hero):
-    """Bantu urutin list hero secara abjad (A-Z) berdasarkan namanya. Huruf besar/kecil nggak ngaruh!"""
+    """Mengurutkan daftar hero berdasarkan abjad dari nama mereka (case-insensitive)."""
     return _merge_sort(kumpulan_hero, key=lambda h: h.nama.lower())
 
 def sort_heroes_by_level(kumpulan_hero):
-    """Bantu urutin list hero dari level paling rendah sampai level paling tinggi."""
+    """Mengurutkan daftar hero dari level terendah hingga tertinggi."""
     return _merge_sort(kumpulan_hero, key=lambda h: h.level)
 
 def sort_heroes_by_star(kumpulan_hero):
-    """Bantu urutin list hero dari bintang paling dikit sampai yang bintangnya mentok (paling tinggi)."""
+    """Mengurutkan daftar hero berdasarkan jumlah bintang dari yang terkecil hingga terbesar."""
     return _merge_sort(kumpulan_hero, key=lambda h: h.star_level)

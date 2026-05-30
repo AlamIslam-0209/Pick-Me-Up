@@ -4,9 +4,9 @@ import json
 
 def hitung_kebutuhan_kristal(level_awal, level_target, jumlah_target=1):
     """
-    Fungsi rekursif untuk menghitung berapa banyak kristal `level_awal` 
-    yang dibutuhkan untuk membuat `jumlah_target` buah kristal `level_target`.
-    Setiap naik 1 level membutuhkan 5 kristal level sebelumnya.
+    Fungsi rekursif untuk menghitung total kristal level rendah yang dibutuhkan 
+    untuk membuat kristal level yang lebih tinggi.
+    Setiap kenaikan 1 level membutuhkan 5 buah kristal dari level sebelumnya.
     """
     if level_awal == level_target:
         return jumlah_target

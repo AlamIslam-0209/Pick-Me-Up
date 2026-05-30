@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 def save_game(path, state_dict):
-    """Simpan state game ke file JSON. `path` bisa berupa str atau Path."""
+    """Menyimpan kemajuan (progress) permainan saat ini ke dalam file JSON."""
     p = Path(path) 
     p.parent.mkdir(parents=True, exist_ok=True) 
     with open(p, "w") as f:
@@ -11,7 +11,7 @@ def save_game(path, state_dict):
 
 
 def load_game(path):
-    """Muat state game dari file JSON. Mengembalikan dict atau {} jika tidak ada."""
+    """Memuat data permainan dari file JSON. Mengembalikan data kosong jika file tidak ditemukan."""
     p = Path(path)
     if not p.exists():
         return {}

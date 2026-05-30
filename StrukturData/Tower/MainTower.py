@@ -6,6 +6,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 json_path = ROOT_DIR / "data"
 
 def siapkan_menara():
+    """Membangun lantai menara satu per satu menggunakan blueprint dari file JSON dan merangkainya menjadi Double Linked List."""
     menara_game = DoubleLinkedList()
     try:
         with open(json_path / "blueprint_tower.json", "r") as file:

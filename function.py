@@ -17,15 +17,18 @@ json_path = ROOT_DIR / "data"
 
 from Algoritma import save_load
 
-barrack_aktif = {} 
-graveyard = set()
-Daftar_Hero = HashTable(400)
-Daftar_Musuh = {}
-n = 1
+barrack_aktif = {} # Menyimpan hero yang sedang aktif di barrack
+graveyard = set() # Menyimpan ID hero yang telah mati
+Daftar_Hero = HashTable(400) # Hash Table untuk menyimpan data hero
+Daftar_Musuh = {} # Dictionary untuk menyimpan data musuh, dengan ID sebagai key
+n = 1 
 
 NAMA_KRISTAL = {1: "Merah", 2: "Jingga", 3: "Kuning", 4: "Hijau", 5: "Biru", 6: "Nila", 7: "Ungu"}
 
 def tampilkan_kristal(inventory):
+    '''
+    Menampilkan sisa kristal evolusi yang ada di dalam inventory pemain.
+    '''
     print("\n=== INVENTORY KRISTAL EVOLUSI ===")
     for level in range(1, 8):
         nama = NAMA_KRISTAL[level]
@@ -37,6 +40,10 @@ def bersihkan_layar():
     os.system('cls' if os.name == 'nt' else 'clear')
     
 def muat_hero():
+    '''
+    Membaca data cetak biru (blueprint) hero dari file JSON 
+    lalu menyimpannya ke dalam Hash Table agar mudah dicari.
+    '''
     with open(json_path / "heroBlueprints.json", "r") as file:
         hero_data = json.load(file)
         
@@ -46,6 +53,9 @@ def muat_hero():
     print(f"[Info] {len(hero_data)} Hero berhasil dimuat ke dalam Hash Table!")
     
 def muat_musuh():
+    '''
+    Membaca dan menyiapkan data status musuh serta boss dari file JSON ke dalam Dictionary.
+    '''
     try:
         with open(json_path / "blueprint_enemy.json", "r") as file:
             enemy_data = json.load(file)
@@ -55,7 +65,13 @@ def muat_musuh():
     except FileNotFoundError:
         print("[Error] blueprint_enemy.json tidak ditemukan!")
         
+        
 def proses_gacha(id_antrian):
+    '''
+    Melakukan undian (gacha) untuk mendapatkan hero baru secara acak.
+    Sistem hanya akan memilih hero yang belum dimiliki pemain atau pahlawan yang sudah mati.
+    Peluang mendapat bintang tinggi bergantung pada persentase bobot yang ditentukan.
+    '''
     pool_bintang = {1: [], 2: [], 3: [], 4: [], 5: []}
     
     for hero_id, hero_data in Daftar_Hero.ambilsemua():
@@ -92,6 +108,10 @@ def proses_gacha(id_antrian):
     return hero_baru
 
 def cek_kematian(daftar_party):
+    '''
+    Memeriksa hero yang sudah kehabisan HP. Jika ada yang gugur, 
+    hero tersebut akan dipindahkan ke makam (Graveyard) dan dikeluarkan dari party.
+    '''
     id_yang_mati = []
     
     for hero_id, hero_obj in barrack_aktif.items():
@@ -109,6 +129,10 @@ def cek_kematian(daftar_party):
                 anggota.remove(hero_id)
                 
 def cek_status(node_party):
+    '''
+    Memeriksa kondisi HP setiap hero setelah pertarungan selesai.
+    Akan menampilkan peringatan jika ada hero yang sekarat (HP 20% ke bawah).
+    '''
     for anggota in node_party.anak:
         if anggota.entitas.is_alive and anggota.entitas.hp <= 0.2 * anggota.entitas.hp_max:
             print(f"⚠️  PERINGATAN: {anggota.entitas.nama} sekarat (HP: {anggota.entitas.hp}/{anggota.entitas.hp_max})")
@@ -117,6 +141,9 @@ def cek_status(node_party):
 
 
 def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventory=None):
+    '''
+    Menyimpan semua data permainan saat ini (hero, party, posisi menara, dan inventory) ke file JSON.
+    '''
     save_path = json_path / "savegame.json"
     save_data = {}
     save_data["barrack_aktif"] = {}
@@ -142,7 +169,13 @@ def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventor
     save_data["inventory"] = inventory
     save_load.save_game(save_path, save_data)
     
+    
 def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_game, inventory):
+    '''
+    Memeriksa ketersediaan file penyimpanan (save data) saat game dimulai. 
+    Jika file ditemukan, data permainan akan dimuat ulang. 
+    Jika tidak, sistem akan menyiapkan nilai bawaan (default) untuk memulai permainan baru.
+    '''
     if saved_data:
         print("[Info] Save data ditemukan! Memuat progress sebelumnya...")
         if "inventory" in saved_data:
