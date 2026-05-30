@@ -140,7 +140,7 @@ def cek_status(node_party):
             cek_status(anggota)
 
 
-def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventory=None):
+def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventory, ekspedisi_aktif):
     '''
     Menyimpan semua data permainan saat ini (hero, party, posisi menara, dan inventory) ke file JSON.
     '''
@@ -158,6 +158,7 @@ def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventor
             "star_level": hero_obj.star_level,
             "equipment": {"weapon": getattr(hero_obj, "weapon", None)},
             "is_alive": hero_obj.is_alive,
+            "is_exploring": getattr(hero_obj, "is_exploring", False),
             "exp": getattr(hero_obj, "exp", 0),
             "exp_next": getattr(hero_obj, "exp_next", hero_obj.level*100)
         }
@@ -167,10 +168,11 @@ def save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventor
     if not inventory:
         inventory = {"tiket_gacha": 0, "kristal": {i: 0 for i in range(1, 8)}}
     save_data["inventory"] = inventory
+    save_data["ekspedisi_aktif"] = ekspedisi_aktif
     save_load.save_game(save_path, save_data)
     
     
-def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_game, inventory):
+def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_game, inventory, ekspedisi_aktif):
     '''
     Memeriksa ketersediaan file penyimpanan (save data) saat game dimulai. 
     Jika file ditemukan, data permainan akan dimuat ulang. 
@@ -212,6 +214,7 @@ def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_gam
                     hero_baru.exp = h_data.get("exp", 0)
                     hero_baru.exp_next = h_data.get("exp_next", hero_baru.level * 100)
                     hero_baru.is_alive = h_data["is_alive"]
+                    hero_baru.is_exploring = h_data.get("is_exploring", False)
                     if "equipment" in h_data and "weapon" in h_data["equipment"]:
                         hero_baru.weapon = h_data["equipment"]["weapon"]
                     barrack_aktif[h_id] = hero_baru
@@ -224,6 +227,10 @@ def cek_save_load(saved_data, graveyard, daftar_party, barrack_aktif, menara_gam
                     menara_game.lantai_sekarang = current_node
                     break
                 current_node = current_node.next
+                
+        if "ekspedisi_aktif" in saved_data:
+            ekspedisi_aktif.clear()
+            ekspedisi_aktif.update(saved_data["ekspedisi_aktif"])
     else:
         print("[Info] Tidak ada save data. Memulai game baru...")
         inventory["tiket_gacha"] = 1

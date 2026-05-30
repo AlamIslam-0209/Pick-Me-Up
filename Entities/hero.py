@@ -10,6 +10,7 @@ class Hero(Entity):
         )
         self.id = data_dict['id']
         self.star_level = data_dict['star_level']
+        self.is_exploring = False
         self.weapon = data_dict['equipment']['weapon']
         self.max_level = self.star_level * 20
         

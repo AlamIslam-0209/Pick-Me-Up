@@ -1,0 +1,52 @@
+{
+    "Desa Pemula": [
+        {"tujuan": "Kota Perbatasan (Wilayah Baron)", "waktu": 15},
+        {"tujuan": "Hutan Pinus Pinggiran", "waktu": 10}
+    ],
+    "Kota Perbatasan (Wilayah Baron)": [
+        {"tujuan": "Kota Perdagangan (Wilayah Viscount)", "waktu": 20}
+    ],
+    "Kota Perdagangan (Wilayah Viscount)": [
+        {"tujuan": "Kota Militer (Wilayah Earl)", "waktu": 25},
+        {"tujuan": "Gurun Pasir Besi", "waktu": 30}
+    ],
+    "Kota Militer (Wilayah Earl)": [
+        {"tujuan": "Benteng Emas (Wilayah Duke)", "waktu": 40}
+    ],
+    "Benteng Emas (Wilayah Duke)": [
+        {"tujuan": "Ibu Kota Kerajaan Manusia", "waktu": 60},
+        {"tujuan": "Puncak Naga Kuno (Kerajaan Dragon)", "waktu": 120}
+    ],
+    
+    "Gurun Pasir Besi": [
+        {"tujuan": "Gerbang Baja Tambang", "waktu": 35}
+    ],
+    "Gerbang Baja Tambang": [
+        {"tujuan": "Ibu Kota Kerajaan Mekanik (Machina)", "waktu": 45},
+        {"tujuan": "Pegunungan Anvil (Kerajaan Dwarf)", "waktu": 50}
+    ],
+    
+    "Hutan Pinus Pinggiran": [
+        {"tujuan": "Lembah Kabut Ilusi", "waktu": 20}
+    ],
+    "Lembah Kabut Ilusi": [
+        {"tujuan": "Gerbang Kerajaan Sihir", "waktu": 25},
+        {"tujuan": "Hutan Suci (Alam Spirit)", "waktu": 30}
+    ],
+    "Gerbang Kerajaan Sihir": [
+        {"tujuan": "Ibu Kota Kerajaan Sihir (Arcana)", "waktu": 40}
+    ],
+    
+    "Hutan Suci (Alam Spirit)": [
+        {"tujuan": "Pohon Dunia (Kerajaan Elf)", "waktu": 45}
+    ],
+    "Pohon Dunia (Kerajaan Elf)": [
+        {"tujuan": "Puncak Naga Kuno (Kerajaan Dragon)", "waktu": 90}
+    ],
+    
+    "Ibu Kota Kerajaan Manusia": [],
+    "Ibu Kota Kerajaan Mekanik (Machina)": [],
+    "Pegunungan Anvil (Kerajaan Dwarf)": [],
+    "Ibu Kota Kerajaan Sihir (Arcana)": [],
+    "Puncak Naga Kuno (Kerajaan Dragon)": []
+}

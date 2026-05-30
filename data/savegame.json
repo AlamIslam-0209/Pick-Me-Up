@@ -12,6 +12,7 @@
                 "weapon": "Heavy Crossbow"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 50,
             "exp_next": 800
         },
@@ -27,6 +28,7 @@
                 "weapon": "Heavy Crossbow"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 570,
             "exp_next": 700
         },
@@ -42,6 +44,7 @@
                 "weapon": "Throwing Knives"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 200,
             "exp_next": 800
         },
@@ -57,6 +60,7 @@
                 "weapon": "Sniper Bow"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 50,
             "exp_next": 800
         },
@@ -72,6 +76,7 @@
                 "weapon": "Spellbook"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 270,
             "exp_next": 600
         },
@@ -87,6 +92,7 @@
                 "weapon": "Greatsword"
             },
             "is_alive": true,
+            "is_exploring": true,
             "exp": 0,
             "exp_next": 100
         },
@@ -102,6 +108,7 @@
                 "weapon": "Buckler"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 0,
             "exp_next": 100
         },
@@ -117,6 +124,7 @@
                 "weapon": "Steel Halberd"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 450,
             "exp_next": 600
         },
@@ -132,6 +140,7 @@
                 "weapon": "Militia Spear"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 0,
             "exp_next": 100
         },
@@ -147,6 +156,7 @@
                 "weapon": "Trainee Bow"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 270,
             "exp_next": 600
         },
@@ -162,6 +172,7 @@
                 "weapon": "Tower Shield"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 0,
             "exp_next": 100
         },
@@ -177,6 +188,7 @@
                 "weapon": "Warhammer"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 0,
             "exp_next": 100
         },
@@ -192,18 +204,19 @@
                 "weapon": "Iron Mace"
             },
             "is_alive": true,
+            "is_exploring": false,
             "exp": 450,
             "exp_next": 600
         }
     },
     "graveyard": [
-        "H006",
-        "H005",
-        "H028",
         "H032",
         "H062",
+        "H005",
         "H034",
-        "H030"
+        "H030",
+        "H028",
+        "H006"
     ],
     "daftar_party": {
         "Party 1": [
@@ -232,6 +245,22 @@
             "5": 0,
             "6": 0,
             "7": 0
+        }
+    },
+    "ekspedisi_aktif": {
+        "H038": {
+            "nama_hero": "Hugo",
+            "waktu_mulai": 1780117928.936052,
+            "waktu_selesai": 1780118088.936052,
+            "waktu_total": 160,
+            "rute": [
+                "Desa Pemula",
+                "Kota Perbatasan (Wilayah Baron)",
+                "Kota Perdagangan (Wilayah Viscount)",
+                "Kota Militer (Wilayah Earl)",
+                "Benteng Emas (Wilayah Duke)",
+                "Ibu Kota Kerajaan Manusia"
+            ]
         }
     }
 }
