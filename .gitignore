@@ -13,3 +13,6 @@ gabungan.txt
 *.spec
 dist/
 build/
+*.backup
+*.docx
+data/savegame.json
