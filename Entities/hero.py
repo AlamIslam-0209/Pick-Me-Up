@@ -30,6 +30,9 @@ class Hero(Entity):
         if self.xp >= xp_dibutuhkan:
             self.level_up(xp_dibutuhkan)
 
+    def pesan_kematian(self):
+        print(f"{str(self.nama).capitalize()}[{'⭐' * self.star_level}] TELAH KEMBALI KE PELUKAN SANG DEWI! Semangat juangnya akan selalu dikenang selamanya")
+
     def level_up(self, xp_dibutuhkan):
         """Fungsi internal saat XP memenuhi syarat"""
         self.xp -= xp_dibutuhkan
@@ -67,3 +70,5 @@ class Hero(Entity):
             "equipment": self.equipment,
             "status_effects": {}
         }
+    
+    

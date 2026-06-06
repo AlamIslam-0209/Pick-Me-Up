@@ -7,6 +7,9 @@ class Entity:
         self.level = level
         self.is_alive = True
 
+    def pesan_kematian(self):
+        pass
+
     def serang(self, target):
         """Method menyerang yang dipanggil di Combat.py"""
         print(f"⚔️ {self.nama} menyerang {target.nama} sebesar {self.attack} DMG!")
@@ -18,7 +21,7 @@ class Entity:
         if self.hp <= 0:
             self.hp = 0
             self.is_alive = False
-            print(f"💀 {self.nama} telah GUGUR di medan pertempuran!")
+            self.pesan_kematian()
 
     def pulihkan_kondisi(self):
         """Dipanggil di main.py setelah menang raid untuk me-reset HP hero"""

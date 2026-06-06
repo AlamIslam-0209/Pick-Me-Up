@@ -13,3 +13,9 @@ class Enemy(Entity):
             print(f"👺 [Monster] {self.nama} menerkam {target.nama} sebesar {self.attack} DMG!")
             
         target.terima_damage(self.attack)
+
+    def pesan_kematian(self):
+        if self.is_boss:
+            print(f"🏆 [BOSS] {self.nama} telah dikalahkan!")
+        else:
+            print(f"💀 [Monster] {self.nama} telah terbunuh!")
