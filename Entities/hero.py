@@ -16,6 +16,7 @@ class Hero(Entity):
         self.star_level = data_dict.get("star_level", 1)
         self.equipment = data_dict.get("equipment", {})
         self.xp = 0
+        self.is_exploring = False
 
     def tambah_xp(self, xp_tambahan):
         """Dipanggil di main.py setelah menang raid"""

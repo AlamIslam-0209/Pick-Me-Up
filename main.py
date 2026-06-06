@@ -38,7 +38,8 @@ def main():
     
     while True:
         bersihkan_layar() # Membersihkan layar setiap kali masuk loop
-        
+        # Simpan progres setiap kali masuk loop untuk memastikan progress selalu tersimpan
+        save_load_game(barrack_aktif, graveyard, daftar_party, menara_game, inventory, ekspedisi_aktif)
         layar_sekarang = navigasi.peek() # Update layar sekarang berdasarkan top stack navigasi
         
         print("="*45)
