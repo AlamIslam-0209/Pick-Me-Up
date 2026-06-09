@@ -33,7 +33,7 @@ def _merge_sort(arr, key):
 
 def sort_heroes_by_id(kumpulan_hero):
     """Mengurutkan daftar hero berdasarkan ID mereka secara menaik."""
-    return _merge_sort(kumpulan_hero, key=lambda h: h.id)
+    return _merge_sort(kumpulan_hero, key=lambda h: h.id) 
 
 def sort_heroes_by_name(kumpulan_hero):
     """Mengurutkan daftar hero berdasarkan abjad dari nama mereka (case-insensitive)."""
@@ -44,5 +44,7 @@ def sort_heroes_by_level(kumpulan_hero):
     return _merge_sort(kumpulan_hero, key=lambda h: h.level)
 
 def sort_heroes_by_star(kumpulan_hero):
-    """Mengurutkan daftar hero berdasarkan jumlah bintang dari yang terkecil hingga terbesar."""
-    return _merge_sort(kumpulan_hero, key=lambda h: h.star_level)
+    """Mengurutkan daftar hero berdasarkan jumlah bintang dari yang terbesar hingga terkecil."""
+    return _merge_sort(kumpulan_hero, key=lambda h: -h.star_level)
+
+

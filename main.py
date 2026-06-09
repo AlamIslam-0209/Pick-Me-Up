@@ -290,7 +290,7 @@ def main():
                 print("\n--- DAFTAR HERO SIAP EVOLUSI ---")
                 bisa_evolusi = []
                 for h_id, hero in barrack_aktif.items():
-                    if hero.level >= hero.max_level and hero.star_level < 7:
+                    if hero.dapat_evolusi():
                         bisa_evolusi.append(hero)
                         print(f"[{hero.id}] {hero.nama} ({hero.star_level}⭐) - Lv.{hero.level}")
                 
@@ -299,7 +299,7 @@ def main():
                 else:
                     target_id = input("\nMasukkan ID Hero yang ingin dievolusi (0 Batal): ").upper()
                     if target_id != "0":
-                        target_hero = next((h for h in bisa_evolusi if h.id == target_id), None)
+                        target_hero = next((h for h in bisa_evolusi if h.id == target_id), None) #
                         
                         if target_hero:
                             kristal_dibutuhkan = target_hero.star_level + 1
@@ -554,7 +554,21 @@ def main():
                     # Bersihkan ekspedisi yang selesai
                     for h_id in selesai_list:
                         if h_id in barrack_aktif:
-                            barrack_aktif[h_id].is_exploring = False
+                            hero_obj = barrack_aktif[h_id]
+                            hero_obj.is_exploring = False
+                            
+                            # Hadiah EXP berdasarkan lama waktu
+                            lama_waktu = ekspedisi_aktif[h_id]["waktu_total"]
+                            hadiah_xp = lama_waktu * 5 
+                            hero_obj.tambah_xp(hadiah_xp)
+                            print(f"🎁 {hero_obj.nama} mendapatkan {hadiah_xp} EXP dari ekspedisi!")
+                            
+                            # Hadiah Kristal acak
+                            import random
+                            if random.random() < 0.3: # 30% peluang
+                                inventory["kristal"][1] = inventory["kristal"].get(1, 0) + 1
+                                print(f"💎 {hero_obj.nama} menemukan 1 Kristal Merah Lv.1!")
+                            
                         del ekspedisi_aktif[h_id]
                         
                 input("\nTekan Enter untuk kembali...")
@@ -702,6 +716,23 @@ def main():
                 if menang:
                     data_pilihan['is_cleared'] = True
                     
+                    print("\n--- HASIL LOOT ---")
+                    ada_drop = False
+                    for musuh_node in master_musuh_node.anak:
+                        musuh_obj = musuh_node.entitas
+
+                        hasil_drop = musuh_obj.drop_loot(data_pilihan['no_lantai'])
+
+                        if hasil_drop:  
+                            ada_drop = True
+                            level_kristal = hasil_drop
+
+                            # Memasukkan kristal ke dalam inventory pemain
+                            inventory["kristal"][level_kristal] = inventory["kristal"].get(level_kristal, 0) + 1
+
+                    if not ada_drop:
+                        print("Tidak ada musuh yang menjatuhkan Kristal kali ini.")
+
                     print("\nLANTAI SELESAI! Memberikan Reward & Pemulihan...")
                     
                     hadiah_xp = data_pilihan['no_lantai'] * 15
